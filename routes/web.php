@@ -28,6 +28,9 @@ Route::post('/straus-survei/store', [StrausSurveiController::class, 'store'])->n
 Route::get('/dashboard', [DashboardController::class, 'index']);
 
 
-Route::get('/straus', [StrausController::class, 'index']);
+Route::get('/straus', [StrausController::class, 'index'])->name('straus.index');
 Route::get('/straus/create', [StrausController::class, 'create'])->name('straus.create');
 Route::post('/straus/store', [StrausController::class, 'store'])->name('straus.store');
+Route::get('/straus/edit/{id}', [StrausController::class, 'edit'])->name('straus.edit');
+Route::put('/straus/update/{id}', [StrausController::class, 'update'])->name('straus.update');
+Route::delete('/straus/delete/{id}', [StrausController::class, 'destroy'])->name('straus.destroy');

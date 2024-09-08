@@ -16,7 +16,6 @@
             <div class="section-body">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Full Width</h4>
                         <a href="{{ route('straus.create') }}" class="btn btn-primary">Create Data</a>
                     </div>
                     <div class="card-body p-0">
@@ -52,9 +51,7 @@
                                             </td>
                                             <td>{{ $question->created_at->format('Y-m-d') }}</td>
                                             <td>
-                                                <a href="" class="btn btn-primary">edit</a>
-                                                <a href="" class="btn btn-danger">delete</a>
-                                                {{-- <a href="{{ route('straus.edit', $question->id) }}"
+                                                <a href="{{ route('straus.edit', $question->id) }}"
                                                     class="btn btn-warning">Edit</a>
                                                 <form action="{{ route('straus.destroy', $question->id) }}" method="POST"
                                                     class="d-inline">
@@ -62,7 +59,7 @@
                                                     @method('DELETE')
                                                     <button class="btn btn-danger"
                                                         onclick="return confirm('Are you sure?')">Delete</button>
-                                                </form> --}}
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

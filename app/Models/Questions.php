@@ -18,8 +18,6 @@ class Questions extends Model
 
     public function answare()
     {
-        return $this->hasMany(Answare::class);
+        return $this->hasMany(Answare::class, 'question_id');
     }
-
-    public function getQuestion() {}
 }

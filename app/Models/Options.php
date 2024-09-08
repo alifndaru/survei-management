@@ -15,17 +15,4 @@ class Options extends Model
     {
         return $this->belongsTo(Questions::class);
     }
-
-
-    // protected $fillable = ['question_id', 'option_text'];
-
-    // public function question()
-    // {
-    //     return $this->belongsTo(Questions::class);
-    // }
-
-    // public function selectedAnswers()
-    // {
-    //     return $this->hasMany(Answare::class);
-    // }
 }
