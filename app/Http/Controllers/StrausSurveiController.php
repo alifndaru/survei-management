@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answare;
+use App\Models\Options;
 use App\Models\Questions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ class StrausSurveiController extends Controller
             ->where('section', 2)
             ->where('category_id', 1) // kategori 1
             ->get();
+
 
         // Tentukan indeks pertanyaan saat ini (mulai dari 0)
         $currentQuestionIndex = $request->query('q', 0);
@@ -50,27 +52,69 @@ class StrausSurveiController extends Controller
         return view('users.straus.index', compact('currentQuestion', 'currentQuestionIndex', 'hasNext', 'section'));
     }
 
+    // public function store(Request $request)
+    // {
+    //     // Validasi input
+    //     $request->validate([
+    //         'question_id' => 'required|exists:questions,id',
+    //         'question_id' => 'required|exists:questions,id',
+    //         'answer' => 'required|in:yes,no', //validasi section 1
+    //         'answers' => 'nullable|array', // Validasi answers sebagai array
+    //         'answers.*' => 'string', // Validasi setiap answer harus ada di tabel options
+    //         'category_id' => 'required|exists:categories,id'
+    //     ]);
+    //     $userId = session('user_id');
+
+    //     if (!$userId) {
+    //         return redirect()->route('/'); // Arahkan ke halaman registrasi jika user_id tidak ada
+    //     }
+    //     Answare::create([
+    //         'user_id' => $userId,
+    //         'question_id' => $request->input('question_id'),
+    //         'answer' => $request->input('answer'),
+    //         'category_id' => $request->input('category_id')
+    //     ]);
+    //     // Redirect ke pertanyaan berikutnya atau ke halaman selesai
+    //     return redirect()->route('straus-survei.index', ['q' => $request->input('current_question_index') + 1]);
+    // }
     public function store(Request $request)
     {
         // Validasi input
         $request->validate([
             'question_id' => 'required|exists:questions,id',
-            'question_id' => 'required|exists:questions,id',
-            'answer' => 'required|in:yes,no',
+            'answer' => 'nullable|in:yes,no', // validasi section 1
+            'answers' => 'nullable|array', // Validasi answers sebagai array
+            'answers.*' => 'string', // Validasi setiap answer harus string
             'category_id' => 'required|exists:categories,id'
         ]);
+
         $userId = session('user_id');
 
         if (!$userId) {
-            return redirect()->route('registration'); // Arahkan ke halaman registrasi jika user_id tidak ada
+            return redirect()->route('/'); // Arahkan ke halaman registrasi jika user_id tidak ada
         }
-        // Simpan jawaban ke database
-        Answare::create([
-            'user_id' => $userId,
-            'question_id' => $request->input('question_id'),
-            'answer' => $request->input('answer'),
-            'category_id' => $request->input('category_id')
-        ]);
+
+        // Simpan jawaban untuk Section 1
+        if ($request->filled('answer')) {
+            Answare::create([
+                'user_id' => $userId,
+                'question_id' => $request->input('question_id'),
+                'answer' => $request->input('answer'),
+                'category_id' => $request->input('category_id')
+            ]);
+        }
+
+        // Simpan jawaban untuk Section 2
+        if ($request->filled('answers')) {
+            foreach ($request->input('answers', []) as $answerDescription) {
+                Answare::create([
+                    'user_id' => $userId,
+                    'question_id' => $request->input('question_id'),
+                    'answer' => $answerDescription,
+                    'category_id' => $request->input('category_id')
+                ]);
+            }
+        }
 
         // Redirect ke pertanyaan berikutnya atau ke halaman selesai
         return redirect()->route('straus-survei.index', ['q' => $request->input('current_question_index') + 1]);
