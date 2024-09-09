@@ -4,16 +4,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StrausController;
 use App\Http\Controllers\StrausSurveiController;
 use App\Http\Controllers\UsersController;
+use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-
-// users
-
-Route::get('/', [UsersController::class, 'index']);
+// users registrasi
+Route::get('/', [UsersController::class, 'index'])->name('users.index');
 Route::post('/users/store', [UsersController::class, 'store'])->name('users.store');
 
 // straus survei
@@ -22,15 +17,19 @@ Route::post('/straus-survei/store', [StrausSurveiController::class, 'store'])->n
 
 
 
+// login
 
+Route::get('/login', [UsersController::class, 'auth'])->name('login');
+Route::post('/login', [UsersController::class, 'login'])->name('users.proses_login');
 
-// admin
-Route::get('/dashboard', [DashboardController::class, 'index']);
+Route::group(['middleware' => ['auth', 'IsAdmin']], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/logout', [UsersController::class, 'logout'])->name('users.logout');
 
-
-Route::get('/straus', [StrausController::class, 'index'])->name('straus.index');
-Route::get('/straus/create', [StrausController::class, 'create'])->name('straus.create');
-Route::post('/straus/store', [StrausController::class, 'store'])->name('straus.store');
-Route::get('/straus/edit/{id}', [StrausController::class, 'edit'])->name('straus.edit');
-Route::put('/straus/update/{id}', [StrausController::class, 'update'])->name('straus.update');
-Route::delete('/straus/delete/{id}', [StrausController::class, 'destroy'])->name('straus.destroy');
+    Route::get('/straus', [StrausController::class, 'index'])->name('straus.index');
+    Route::get('/straus/create', [StrausController::class, 'create'])->name('straus.create');
+    Route::post('/straus/store', [StrausController::class, 'store'])->name('straus.store');
+    Route::get('/straus/edit/{id}', [StrausController::class, 'edit'])->name('straus.edit');
+    Route::put('/straus/update/{id}', [StrausController::class, 'update'])->name('straus.update');
+    Route::delete('/straus/delete/{id}', [StrausController::class, 'destroy'])->name('straus.destroy');
+});

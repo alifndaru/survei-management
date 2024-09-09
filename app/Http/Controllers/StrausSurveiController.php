@@ -13,6 +13,11 @@ class StrausSurveiController extends Controller
 {
     public function index(Request $request)
     {
+        // $userId = session('user_id');
+        // if (!$userId) {
+        //     return redirect()->route('users.index'); // Arahkan ke halaman registrasi jika user_id tidak ada
+        // }
+
         // Ambil semua pertanyaan dari section 1 kategori 1
         $section1Questions = Questions::with('options')
             ->where('section', 1)
@@ -52,31 +57,6 @@ class StrausSurveiController extends Controller
         return view('users.straus.index', compact('currentQuestion', 'currentQuestionIndex', 'hasNext', 'section'));
     }
 
-    // public function store(Request $request)
-    // {
-    //     // Validasi input
-    //     $request->validate([
-    //         'question_id' => 'required|exists:questions,id',
-    //         'question_id' => 'required|exists:questions,id',
-    //         'answer' => 'required|in:yes,no', //validasi section 1
-    //         'answers' => 'nullable|array', // Validasi answers sebagai array
-    //         'answers.*' => 'string', // Validasi setiap answer harus ada di tabel options
-    //         'category_id' => 'required|exists:categories,id'
-    //     ]);
-    //     $userId = session('user_id');
-
-    //     if (!$userId) {
-    //         return redirect()->route('/'); // Arahkan ke halaman registrasi jika user_id tidak ada
-    //     }
-    //     Answare::create([
-    //         'user_id' => $userId,
-    //         'question_id' => $request->input('question_id'),
-    //         'answer' => $request->input('answer'),
-    //         'category_id' => $request->input('category_id')
-    //     ]);
-    //     // Redirect ke pertanyaan berikutnya atau ke halaman selesai
-    //     return redirect()->route('straus-survei.index', ['q' => $request->input('current_question_index') + 1]);
-    // }
     public function store(Request $request)
     {
         // Validasi input
