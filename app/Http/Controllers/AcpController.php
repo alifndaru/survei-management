@@ -97,4 +97,19 @@ class AcpController extends Controller
         // Redirect back with success message
         return redirect()->route('acp.edit', $question->id)->with('success', 'Pertanyaan berhasil diperbarui.');
     }
+
+    public function destroy(string $id)
+    {
+        try {
+            $question = Questions::with('options', 'answare')->findOrFail($id);
+            $question->options()->delete();
+            $question->answare()->delete();
+
+            $question->delete();
+            return redirect()->route('acp.index')->with('success', 'Pertanyaan berhasil dihapus.');
+        } catch (\Exception $e) {
+            // Log the error or return an error message
+            return redirect()->route('acp.index')->with('error', 'Error deleting question: ' . $e->getMessage());
+        }
+    }
 }

@@ -14,6 +14,9 @@
             <li class="{{ Request::is('straus', 'straus/create') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ url('straus') }}"><i class="fas fa-home"></i> <span>Straus</span></a>
             </li>
+            <li class="{{ Request::is('acp', 'acp/create') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ url('acp') }}"><i class="fas fa-home"></i> <span>ACP</span></a>
+            </li>
             <li>
                 <form action="{{ route('users.logout') }}" method="POST" id="logout-form">
                     @csrf
