@@ -85,14 +85,14 @@
                                     <label class="form-label fw-semibold text-secondary">Your Answer:</label>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                                         <div class="form-check me-2">
-                                            <input class="form-check-input" type="radio" name="answer" id="yes"
-                                                value="yes">
-                                            <label class="form-check-label" for="yes">Yes</label>
+                                            <input class="form-check-input" type="radio" name="answer" id="pernah"
+                                                value="pernah">
+                                            <label class="form-check-label" for="pernah">pernah</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="answer" id="no"
-                                                value="no">
-                                            <label class="form-check-label" for="no">No</label>
+                                            <input class="form-check-input" type="radio" name="answer" id="tidak pernah"
+                                                value="tidak pernah">
+                                            <label class="form-check-label" for="tidak pernah">tidak pernah</label>
                                         </div>
                                     </div>
                                 </div>

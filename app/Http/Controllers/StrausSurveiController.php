@@ -62,7 +62,7 @@ class StrausSurveiController extends Controller
         // Validasi input
         $request->validate([
             'question_id' => 'required|exists:questions,id',
-            'answer' => 'nullable|in:yes,no', // validasi section 1
+            'answer' => 'nullable|in:pernah,tidak pernah', // validasi section 1
             'answers' => 'nullable|array', // Validasi answers sebagai array
             'answers.*' => 'string', // Validasi setiap answer harus string
             'category_id' => 'required|exists:categories,id'
