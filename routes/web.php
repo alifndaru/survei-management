@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcpController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StrausController;
 use App\Http\Controllers\StrausSurveiController;
@@ -34,4 +35,9 @@ Route::group(['middleware' => ['auth', 'IsAdmin']], function () {
     Route::get('/straus/edit/{id}', [StrausController::class, 'edit'])->name('straus.edit');
     Route::put('/straus/update/{id}', [StrausController::class, 'update'])->name('straus.update');
     Route::delete('/straus/delete/{id}', [StrausController::class, 'destroy'])->name('straus.destroy');
+
+
+    Route::get('/acp', [AcpController::class, 'index'])->name('acp.index');
+    Route::get('/acp/create', [AcpController::class, 'create'])->name('acp.create');
+    Route::post('/acp/store', [AcpController::class, 'store'])->name('acp.store');
 });
