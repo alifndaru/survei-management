@@ -21,6 +21,7 @@ class UserAnswersExport implements FromQuery, WithHeadings, WithStyles, WithEven
         return User::query()
             ->leftJoin('selected_answers', 'users.id', '=', 'selected_answers.user_id')
             ->leftJoin('questions', 'selected_answers.question_id', '=', 'questions.id')
+            ->where('selected_answers.category_id', 1) // Assuming the category_id column is in the selected_answers table
             ->whereIn('questions.section', [1, 2]) // Include both sections 1 and 2
             ->select(
                 'users.id as user_id',
