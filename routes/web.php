@@ -40,4 +40,7 @@ Route::group(['middleware' => ['auth', 'IsAdmin']], function () {
     Route::get('/acp', [AcpController::class, 'index'])->name('acp.index');
     Route::get('/acp/create', [AcpController::class, 'create'])->name('acp.create');
     Route::post('/acp/store', [AcpController::class, 'store'])->name('acp.store');
+    Route::get('/acp/edit/{id}', [AcpController::class, 'edit'])->name('acp.edit');
+    Route::put('/acp/update/{id}', [AcpController::class, 'update'])->name('acp.update');
+    Route::delete('/acp/delete/{id}', [AcpController::class, 'destroy'])->name('acp.destroy');
 });
