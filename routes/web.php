@@ -26,6 +26,8 @@ Route::group(['middleware' => ['auth', 'IsAdmin']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [UsersController::class, 'logout'])->name('users.logout');
 
+    Route::get('/export-user-answers', [DashboardController::class, 'exportExcel'])->name('export-user-answers');
+
     Route::get('/straus', [StrausController::class, 'index'])->name('straus.index');
     Route::get('/straus/create', [StrausController::class, 'create'])->name('straus.create');
     Route::post('/straus/store', [StrausController::class, 'store'])->name('straus.store');

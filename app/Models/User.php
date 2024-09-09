@@ -50,4 +50,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function selectedAnswers()
+    {
+        return $this->hasMany(Answare::class);
+    }
 }
