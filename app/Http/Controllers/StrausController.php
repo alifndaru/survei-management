@@ -15,7 +15,7 @@ class StrausController extends Controller
      */
     public function index()
     {
-        $questions = Questions::with('options')->orderBy('created_at', 'desc')->paginate(10);
+        $questions = Questions::with('options')->where('category_id', 1)->orderBy('created_at', 'desc')->paginate(10);
         return view('dashboard.straus.index', compact('questions'));
     }
 
