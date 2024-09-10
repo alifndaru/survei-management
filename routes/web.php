@@ -15,17 +15,15 @@ Route::get('/login', [UsersController::class, 'auth'])->name('login');
 Route::post('/login', [UsersController::class, 'login'])->name('users.proses_login');
 
 // Straus Survei routes
+
+
 Route::prefix('straus-survei')->name('straus-survei.')->group(function () {
     Route::get('/', [StrausSurveiController::class, 'index'])->name('index');
     Route::post('/store', [StrausSurveiController::class, 'store'])->name('store');
-    Route::get('/completion-options', [StrausSurveiController::class, 'showCompletionOptions'])->name('straus-survei.completion-options');
+    Route::get('/completion-options', [StrausSurveiController::class, 'showCompletionOptions'])->name('completion-options');
 });
-
-// Static route for ACP view
-
-// acp survei routes
 Route::get('/acp-survei', [AcpSurveiController::class, 'index'])->name('acp-survei.index');
-
+Route::post('/acp-survei/store', [AcpSurveiController::class, 'store'])->name('acp-survei.store');
 
 
 

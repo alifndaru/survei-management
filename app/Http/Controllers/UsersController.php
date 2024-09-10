@@ -36,9 +36,7 @@ class UsersController extends Controller
             'role' => 'user',
         ]);
         session(['user_id' => $user->id]);
-
-
-        return redirect('/straus-survei')->with('success', 'User created successfully');
+        return redirect()->route('straus-survei.index')->with('success', 'User created successfully');
     }
 
     public function auth()

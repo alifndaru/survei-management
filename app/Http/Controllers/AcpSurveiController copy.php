@@ -5,30 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\Answare;
 use App\Models\Questions;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AcpSurveiController extends Controller
 {
     public function index(Request $request)
     {
-        if (session('user_id') === null) {
-            return redirect()->route('users.index');
-        }
+
         $acp = Questions::with('options')
             ->where('section', 1)
             ->where('category_id', 2)
             ->get();
 
+        dd($acp);
+
         $currentQuestionIndex = $request->query('q', 0);
+
 
         if ($currentQuestionIndex < $acp->count()) {
             $currentQuestion = $acp[$currentQuestionIndex];
+            dd($currentQuestion);
             $hasNext = ($currentQuestionIndex + 1) < $acp->count();
+            dd($currentQuestion);
             $section = 1;
         } else {
             return redirect()->route('straus-survei.completion-options');
         }
-
         return view('users.acp.index', compact('currentQuestion', 'currentQuestionIndex', 'hasNext', 'section'));
     }
 
@@ -37,14 +38,14 @@ class AcpSurveiController extends Controller
         $request->validate([
             'question_id' => 'required|exists:questions,id',
             'answer' => 'required|in:pernah,tidak pernah|string',
-            'category_id' => 'required|exists:categories,id',
-            'current_question_index' => 'required|integer'
+            'category_id' => 'required|exists:categories,id'
         ]);
 
         $userId = session('user_id');
 
         if (!$userId) {
-            return redirect()->route('users.index');
+            // Asumsi '/login' adalah route untuk halaman login, sesuaikan dengan aplikasi Anda
+            return redirect()->route('login'); // Pastikan ini adalah route yang benar untuk halaman login atau registrasi
         }
 
         Answare::create([
@@ -55,6 +56,6 @@ class AcpSurveiController extends Controller
         ]);
 
         // Pastikan 'q' adalah parameter yang benar untuk menunjukkan indeks pertanyaan saat ini
-        return redirect()->route('acp-survei.index', ['q' => $request->input('current_question_index') + 1]);
+        return redirect()->route('straus-survei.index', ['q' => $request->input('current_question_index') + 1]);
     }
 }

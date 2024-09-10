@@ -71,7 +71,7 @@ class StrausSurveiController extends Controller
         $userId = session('user_id');
 
         if (!$userId) {
-            return redirect()->route('/'); // Arahkan ke halaman registrasi jika user_id tidak ada
+            return redirect()->route('users.index'); // Arahkan ke halaman registrasi jika user_id tidak ada
         }
 
         // Simpan jawaban untuk Section 1
@@ -100,8 +100,8 @@ class StrausSurveiController extends Controller
         return redirect()->route('straus-survei.index', ['q' => $request->input('current_question_index') + 1]);
     }
 
-    // public function showCompletionOptions()
-    // {
-    //     return view('users.straus.completion-options');
-    // }
+    public function showCompletionOptions()
+    {
+        return view('users.straus.completion-options');
+    }
 }

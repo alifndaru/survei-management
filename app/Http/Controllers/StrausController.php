@@ -127,11 +127,6 @@ class StrausController extends Controller
      */
     public function destroy(string $id)
     {
-        // $question = Questions::with('options', 'answare')->findOrFail($id);
-        // $question->options()->delete();
-        // $question->answare()->delete();
-
-        // $question->delete();
         try {
             $question = Questions::with('options', 'answare')->findOrFail($id);
             $question->options()->delete();
@@ -143,18 +138,5 @@ class StrausController extends Controller
             // Log the error or return an error message
             return redirect()->route('straus.index')->with('error', 'Error deleting question: ' . $e->getMessage());
         }
-
-
-
-        // $question = Questions::with('options')->findOrFail($id);
-        // foreach ($question->options as $option) {
-        //     $option->delete();
-        // }
-        // $selectedAnswers = $question->answare;
-        // foreach ($selectedAnswers as $selectedAnswer) {
-        //     $selectedAnswer->delete();
-        // }
-        // $question->delete();
-        // return redirect()->route('straus.index')->with('success', 'Pertanyaan berhasil dihapus.');
     }
 }
