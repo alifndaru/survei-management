@@ -1,181 +1,52 @@
-{{-- @extends('dashboard.layouts.app')
-
-@section('title', 'Dashboard Page')
-
-@push('style')
-    <!-- CSS Libraries -->
-    <style>
-        .chart-container {
-            position: relative;
-            margin: auto;
-            height: 60vh;
-            width: 80vw;
-        }
-
-        /* Custom font styling for chart */
-        .chart-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .chart-container {
-                width: 100vw;
-                height: 50vh;
-            }
-        }
-    </style>
-@endpush
-
-@section('main')
-    <div class="main-content">
-        <section class="section">
-            <div class="section-header">
-                <h1>Dashboard</h1>
-            </div>
-
-            <div class="section-body">
-                <div class="chart-container">
-                    <h2 class="chart-title">Distribution of Answers</h2>
-                    <canvas id="answersChart"></canvas>
-                </div>
-            </div>
-        </section>
-    </div>
-@endsection
-
-@push('scripts')
-    <!-- JS Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var ctx = document.getElementById('answersChart').getContext('2d');
-        var answersChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: {!! $labels->toJson() !!},
-                datasets: [{
-                    label: '# of Answers',
-                    data: {!! $data->toJson() !!},
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(255, 206, 86, 0.7)',
-                        'rgba(75, 192, 192, 0.7)',
-                        'rgba(153, 102, 255, 0.7)',
-                        'rgba(255, 159, 64, 0.7)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 2,
-                    hoverBackgroundColor: [
-                        'rgba(255, 99, 132, 0.9)',
-                        'rgba(54, 162, 235, 0.9)',
-                        'rgba(255, 206, 86, 0.9)',
-                        'rgba(75, 192, 192, 0.9)',
-                        'rgba(153, 102, 255, 0.9)',
-                        'rgba(255, 159, 64, 0.9)'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            font: {
-                                size: 16
-                            }
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.7)',
-                        titleFont: {
-                            size: 14
-                        },
-                        bodyFont: {
-                            size: 14
-                        }
-                    }
-                }
-            }
-        });
-    </script>
-@endpush --}}
 @extends('dashboard.layouts.app')
 
-@section('title', 'Dashboard Page')
+@section('title', 'Chart Management')
 
 @push('style')
-    <!-- CSS Libraries -->
-    <style>
-        .chart-container {
-            position: relative;
-            margin: auto;
-            height: 60vh;
-            width: 80vw;
-        }
-
-        /* Custom font styling for chart */
-        .chart-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .chart-container {
-                width: 100vw;
-                height: 50vh;
-            }
-        }
-    </style>
+    <!-- Include any CSS libraries needed for dropdown styling -->
 @endpush
 
 @section('main')
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>Dashboard</h1>
+                <h1>Chart Management</h1>
             </div>
 
             <div class="section-body">
-                <a href="{{ route('export-user-answers') }}" class="btn btn-success">Export to Excel</a>
-                <div class="chart-container">
-                    <h2 class="chart-title">Distribution of Answers (Section 1)</h2>
-                    <canvas id="answersChartSection1"></canvas>
-                </div>
-                <div class="chart-container">
-                    <h2 class="chart-title">Distribution of Answers (Section 2)</h2>
-                    <canvas id="answersChartSection2"></canvas>
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Select Category</h4>
+                        <!-- Dropdown to select category -->
+                        <select id="categoryDropdown" class="form-control">
+                            <option selected disabled>Select Category</option>
+                            <option value="1">Straus</option>
+                            <option value="2">ACP</option>
+                            <option value="3">Skala Stress</option>
+                        </select>
+
+                        <!-- Dropdown to select section, initially hidden -->
+                        <select id="sectionDropdown" class="form-control mt-2" style="display: none;">
+                            <option value="1">Section 1</option>
+                            <option value="2">Section 2</option>
+                        </select>
+                    </div>
+
+                    <div class="card-body">
+                        <!-- Button to download Excel, initially hidden -->
+                        <div id="exportButtonContainer" class="mb-2" style="display: none;">
+                            <a id="exportButton" href="{{ route('export-user-answers-straus') }}"
+                                class="btn btn-primary">Export to Excel</a>
+                        </div>
+
+                        <!-- Placeholder for Chart and message -->
+                        <div id="chartContainer" style="display: none;">
+                            <canvas id="chartCanvas"></canvas>
+                        </div>
+                        <div id="message" class="alert alert-info" style="display: block;">
+                            Please select a category to display the chart.
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -183,149 +54,116 @@
 @endsection
 
 @push('scripts')
-    <!-- JS Libraries -->
+    <!-- Include Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
-        // Chart for Section 1
-        var ctx1 = document.getElementById('answersChartSection1').getContext('2d');
-        var answersChartSection1 = new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: {!! $labels->toJson() !!},
-                datasets: [{
-                    label: '# of Answers (Section 1)',
-                    data: {!! $data->toJson() !!},
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(255, 206, 86, 0.7)',
-                        'rgba(75, 192, 192, 0.7)',
-                        'rgba(153, 102, 255, 0.7)',
-                        'rgba(255, 159, 64, 0.7)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        }
-                    }
+        let labels = @json($labels);
+        let data = @json($data);
+        let labelsSection2 = @json($labelsSection2);
+        let dataSection2 = @json($dataSection2);
+        let labelsAcp = @json($labelsAcp);
+        let dataAcp = @json($dataAcp);
+        let chart;
+        const chartContainer = document.getElementById('chartContainer');
+        const message = document.getElementById('message');
+        const exportButtonContainer = document.getElementById('exportButtonContainer');
+        const exportButton = document.getElementById('exportButton');
+
+        // Function to render chart
+        function renderChart(labels, data) {
+            const ctx = document.getElementById('chartCanvas').getContext('2d');
+            if (chart) {
+                chart.destroy(); // Destroy previous chart instance if it exists
+            }
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Answers',
+                        data: data,
+                        backgroundColor: generateColors(data.length),
+                        borderColor: 'rgba(0, 0, 0, 0.1)',
+                        borderWidth: 1
+                    }]
                 },
-                plugins: {
-                    legend: {
-                        labels: {
-                            font: {
-                                size: 16
-                            }
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.7)',
-                        titleFont: {
-                            size: 14
-                        },
-                        bodyFont: {
-                            size: 14
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
                         }
                     }
                 }
+            });
+        }
+
+        // Function to generate random colors
+        function generateColors(count) {
+            const colors = [];
+            for (let i = 0; i < count; i++) {
+                colors.push(
+                    `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`
+                );
             }
+            return colors;
+        }
+
+        // Function to update chart and button visibility based on dropdown selections
+        function updateChart() {
+            const category = document.getElementById('categoryDropdown').value;
+            const section = document.getElementById('sectionDropdown').value;
+
+            let newLabels, newData;
+            if (category == 1) {
+                if (section == 1) {
+                    newLabels = labels;
+                    newData = data;
+                } else if (section == 2) {
+                    newLabels = labelsSection2;
+                    newData = dataSection2;
+                }
+                exportButtonContainer.style.display = 'block'; // Show export button for category 1
+            } else if (category == 2) {
+                newLabels = labelsAcp;
+                newData = dataAcp;
+                exportButtonContainer.style.display = 'none'; // Hide export button for category 2
+            } else {
+                // Default: No data
+                newLabels = [];
+                newData = [];
+                exportButtonContainer.style.display = 'none'; // Hide export button when no category is selected
+            }
+
+            if (newLabels.length > 0 && newData.length > 0) {
+                chartContainer.style.display = 'block';
+                message.style.display = 'none';
+                renderChart(newLabels, newData);
+            } else {
+                chartContainer.style.display = 'none';
+                message.style.display = 'block';
+            }
+        }
+
+        // Render the initial chart on page load
+        updateChart();
+
+        // Event listener for category selection
+        document.getElementById('categoryDropdown').addEventListener('change', function() {
+            const category = this.value;
+            if (category == 1) {
+                // Show section dropdown for category 1 (Straus)
+                document.getElementById('sectionDropdown').style.display = 'block';
+            } else {
+                // Hide section dropdown for other categories
+                document.getElementById('sectionDropdown').style.display = 'none';
+            }
+            updateChart();
         });
 
-        // Chart for Section 2
-        var ctx2 = document.getElementById('answersChartSection2').getContext('2d');
-        var answersChartSection2 = new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: {!! $labelsSection2->toJson() !!},
-                datasets: [{
-                    label: '# of Answers (Section 2)',
-                    data: {!! $dataSection2->toJson() !!},
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(255, 206, 86, 0.7)',
-                        'rgba(75, 192, 192, 0.7)',
-                        'rgba(153, 102, 255, 0.7)',
-                        'rgba(255, 159, 64, 0.7)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            font: {
-                                size: 16
-                            }
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.7)',
-                        titleFont: {
-                            size: 14
-                        },
-                        bodyFont: {
-                            size: 14
-                        }
-                    }
-                }
-            }
+        // Event listener for section selection
+        document.getElementById('sectionDropdown').addEventListener('change', function() {
+            updateChart();
         });
     </script>
 @endpush

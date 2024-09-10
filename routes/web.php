@@ -31,7 +31,7 @@ Route::post('/acp-survei/store', [AcpSurveiController::class, 'store'])->name('a
 Route::middleware(['auth', 'IsAdmin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [UsersController::class, 'logout'])->name('users.logout');
-    Route::get('/export-user-answers', [DashboardController::class, 'exportExcel'])->name('export-user-answers');
+    Route::get('/export-user-answers', [DashboardController::class, 'exportExcel'])->name('export-user-answers-straus');
 
     // Straus CRUD
     Route::prefix('straus')->name('straus.')->group(function () {
