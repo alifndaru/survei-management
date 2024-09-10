@@ -1,46 +1,57 @@
 <?php
 
 use App\Http\Controllers\AcpController;
+use App\Http\Controllers\AcpSurveiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StrausController;
 use App\Http\Controllers\StrausSurveiController;
 use App\Http\Controllers\UsersController;
-use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 
-// users registrasi
-Route::get('/', [UsersController::class, 'index'])->name('users.index');
+// Users routes
+Route::get('/', [UsersController::class, 'index'])->name('users.index'); //register
 Route::post('/users/store', [UsersController::class, 'store'])->name('users.store');
-
-// straus survei
-Route::get('/straus-survei', [StrausSurveiController::class, 'index'])->name('straus-survei.index');
-Route::post('/straus-survei/store', [StrausSurveiController::class, 'store'])->name('straus-survei.store');
-
-
-
-// login
-
 Route::get('/login', [UsersController::class, 'auth'])->name('login');
 Route::post('/login', [UsersController::class, 'login'])->name('users.proses_login');
 
-Route::group(['middleware' => ['auth', 'IsAdmin']], function () {
+// Straus Survei routes
+Route::prefix('straus-survei')->name('straus-survei.')->group(function () {
+    Route::get('/', [StrausSurveiController::class, 'index'])->name('index');
+    Route::post('/store', [StrausSurveiController::class, 'store'])->name('store');
+    Route::get('/completion-options', [StrausSurveiController::class, 'showCompletionOptions'])->name('straus-survei.completion-options');
+});
+
+// Static route for ACP view
+
+// acp survei routes
+Route::get('/acp-survei', [AcpSurveiController::class, 'index'])->name('acp-survei.index');
+
+
+
+
+// Admin routes
+Route::middleware(['auth', 'IsAdmin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [UsersController::class, 'logout'])->name('users.logout');
-
     Route::get('/export-user-answers', [DashboardController::class, 'exportExcel'])->name('export-user-answers');
 
-    Route::get('/straus', [StrausController::class, 'index'])->name('straus.index');
-    Route::get('/straus/create', [StrausController::class, 'create'])->name('straus.create');
-    Route::post('/straus/store', [StrausController::class, 'store'])->name('straus.store');
-    Route::get('/straus/edit/{id}', [StrausController::class, 'edit'])->name('straus.edit');
-    Route::put('/straus/update/{id}', [StrausController::class, 'update'])->name('straus.update');
-    Route::delete('/straus/delete/{id}', [StrausController::class, 'destroy'])->name('straus.destroy');
+    // Straus CRUD
+    Route::prefix('straus')->name('straus.')->group(function () {
+        Route::get('/', [StrausController::class, 'index'])->name('index');
+        Route::get('/create', [StrausController::class, 'create'])->name('create');
+        Route::post('/store', [StrausController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [StrausController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [StrausController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [StrausController::class, 'destroy'])->name('destroy');
+    });
 
-
-    Route::get('/acp', [AcpController::class, 'index'])->name('acp.index');
-    Route::get('/acp/create', [AcpController::class, 'create'])->name('acp.create');
-    Route::post('/acp/store', [AcpController::class, 'store'])->name('acp.store');
-    Route::get('/acp/edit/{id}', [AcpController::class, 'edit'])->name('acp.edit');
-    Route::put('/acp/update/{id}', [AcpController::class, 'update'])->name('acp.update');
-    Route::delete('/acp/delete/{id}', [AcpController::class, 'destroy'])->name('acp.destroy');
+    // ACP CRUD
+    Route::prefix('acp')->name('acp.')->group(function () {
+        Route::get('/', [AcpController::class, 'index'])->name('index');
+        Route::get('/create', [AcpController::class, 'create'])->name('create');
+        Route::post('/store', [AcpController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [AcpController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [AcpController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [AcpController::class, 'destroy'])->name('destroy');
+    });
 });

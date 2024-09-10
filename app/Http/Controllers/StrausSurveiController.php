@@ -13,12 +13,10 @@ class StrausSurveiController extends Controller
 {
     public function index(Request $request)
     {
-        // $userId = session('user_id');
-        // if (!$userId) {
-        //     return redirect()->route('users.index'); // Arahkan ke halaman registrasi jika user_id tidak ada
-        // }
+        if (session('user_id') === null) {
+            return redirect()->route('users.index');
+        }
 
-        // Ambil semua pertanyaan dari section 1 kategori 1
         $section1Questions = Questions::with('options')
             ->where('section', 1)
             ->where('category_id', 1) // kategori 1
@@ -33,6 +31,7 @@ class StrausSurveiController extends Controller
 
         // Tentukan indeks pertanyaan saat ini (mulai dari 0)
         $currentQuestionIndex = $request->query('q', 0);
+
 
         // Jika masih ada pertanyaan di section 1 yang belum dijawab
         if ($currentQuestionIndex < $section1Questions->count()) {
@@ -50,7 +49,8 @@ class StrausSurveiController extends Controller
                 $section = 2;
             } else {
                 // Jika sudah selesai semua, arahkan ke halaman akhir atau halaman sukses
-                return redirect()->route('straus-survei.index');
+                // return redirect()->route('straus-survei.index');
+                return redirect()->route('straus-survei.completion-options');
             }
         }
 
@@ -99,4 +99,9 @@ class StrausSurveiController extends Controller
         // Redirect ke pertanyaan berikutnya atau ke halaman selesai
         return redirect()->route('straus-survei.index', ['q' => $request->input('current_question_index') + 1]);
     }
+
+    // public function showCompletionOptions()
+    // {
+    //     return view('users.straus.completion-options');
+    // }
 }
