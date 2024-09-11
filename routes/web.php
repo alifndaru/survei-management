@@ -32,6 +32,7 @@ Route::middleware(['auth', 'IsAdmin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [UsersController::class, 'logout'])->name('users.logout');
     Route::get('/export-user-answers', [DashboardController::class, 'exportExcel'])->name('export-user-answers-straus');
+    Route::get('/export-user-answers-Acp', [DashboardController::class, 'AcpExportExcel'])->name('export-user-answers-acp');
 
     // Straus CRUD
     Route::prefix('straus')->name('straus.')->group(function () {
