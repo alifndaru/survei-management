@@ -17,6 +17,10 @@
             <li class="{{ Request::is('acp', 'acp/create') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ url('acp') }}"><i class="fas fa-home"></i> <span>ACP</span></a>
             </li>
+            <li class="{{ Request::is('skala-stress', 'skala-stress/create') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ url('skala-stress') }}"><i class="fas fa-home"></i> <span>Skala
+                        Stress</span></a>
+            </li>
             <li>
                 <form action="{{ route('users.logout') }}" method="POST" id="logout-form">
                     @csrf

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AcpController;
 use App\Http\Controllers\AcpSurveiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SkalaStressController;
 use App\Http\Controllers\StrausController;
 use App\Http\Controllers\StrausSurveiController;
 use App\Http\Controllers\UsersController;
@@ -52,5 +53,14 @@ Route::middleware(['auth', 'IsAdmin'])->group(function () {
         Route::get('/edit/{id}', [AcpController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [AcpController::class, 'update'])->name('update');
         Route::delete('/delete/{id}', [AcpController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('skala-stress')->name('skala-stress.')->group(function () {
+        Route::get('/', [SkalaStressController::class, 'index'])->name('index');
+        Route::get('/create', [SkalaStressController::class, 'create'])->name('create');
+        Route::post('/store', [SkalaStressController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [SkalaStressController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [SkalaStressController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [SkalaStressController::class, 'destroy'])->name('destroy');
     });
 });
