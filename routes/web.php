@@ -22,7 +22,7 @@ Route::post('/login', [UsersController::class, 'login'])->name('users.proses_log
 Route::prefix('straus-survei')->name('straus-survei.')->group(function () {
     Route::get('/', [StrausSurveiController::class, 'index'])->name('index');
     Route::post('/store', [StrausSurveiController::class, 'store'])->name('store');
-    // Route::get('/completion-options', [StrausSurveiController::class, 'showCompletionOptions'])->name('completion-options');
+    Route::get('/completion-options', [StrausSurveiController::class, 'showCompletionOptions'])->name('completion-options');
 });
 Route::get('/acp-survei', [AcpSurveiController::class, 'index'])->name('acp-survei.index');
 Route::post('/acp-survei/store', [AcpSurveiController::class, 'store'])->name('acp-survei.store');
@@ -40,9 +40,9 @@ Route::get('/acp-survei/finish', [AcpSurveiController::class, 'finish'])->name('
 Route::get('/skala-stress-survei/finish', [SkalaStressSurveiController::class, 'finish'])->name('skala-stress-survei.finish');
 
 // Halaman pilihan survei
-Route::get('/completion-options', [StrausSurveiController::class, 'showCompletionOptions'])->name('straus-survei.completion-options');
+// Route::get('/completion-options', [StrausSurveiController::class, 'showCompletionOptions'])->name('completion-options');
 
-Route::get('/finish', [StrausSurveiController::class, 'finish'])->name('finish');
+Route::get('/finish-dari-straus', [StrausSurveiController::class, 'finish'])->name('finish');
 
 
 // Admin routes

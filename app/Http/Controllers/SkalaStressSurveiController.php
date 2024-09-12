@@ -9,14 +9,14 @@ use Illuminate\Http\Request;
 class SkalaStressSurveiController extends Controller
 {
 
-    public function finish()
-    {
-        // Tandai survei Skala Stress sebagai selesai di session
-        session(['completed_stress_scale_survey' => true]);
+    // public function finish()
+    // {
+    //     // Tandai survei Skala Stress sebagai selesai di session
+    //     session(['completed_stress_scale_survey' => true]);
 
-        // Arahkan ke halaman akhir atau berikan pesan selesai
-        return redirect()->route('finish');
-    }
+    //     // Arahkan ke halaman akhir atau berikan pesan selesai
+    //     return redirect()->route('finish');
+    // }
 
     public function index(Request $request)
     {
@@ -35,7 +35,12 @@ class SkalaStressSurveiController extends Controller
             $hasNext = ($currentQuestionIndex + 1) < $skalaStress->count();
             $section = 1;
         } else {
-            return redirect()->route('straus-survei.completion-options');
+            // Tandai survei Skala Stress sebagai selesai di session
+            session(['completed_stress_scale_survey' => true]);
+
+            // Arahkan ke halaman akhir atau berikan pesan selesai
+            return redirect()->route('finish');
+            // return redirect()->route('straus-survei.completion-options');
         }
 
         return view('users.skala-stress.index', compact('currentQuestion', 'currentQuestionIndex', 'hasNext', 'section'));

@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Auth;
 
 class AcpSurveiController extends Controller
 {
+    // public function finish()
+    // {
+    //     // Tandai survei ACP sebagai selesai di session
+    //     session(['completed_acp_survey' => true]);
+
+    //     // Arahkan ke survei Skala Stress jika ACP selesai
+    //     return redirect()->route('skala-stress-survei.index');
+    // }
+
     public function index(Request $request)
     {
         if (session('user_id') === null) {
@@ -26,7 +35,11 @@ class AcpSurveiController extends Controller
             $hasNext = ($currentQuestionIndex + 1) < $acp->count();
             $section = 1;
         } else {
-            return redirect()->route('straus-survei.completion-options');
+            session(['completed_acp_survey' => true]);
+
+            // Arahkan ke survei Skala Stress jika ACP selesai
+            return redirect()->route('skala-stress-survei.index');
+            // return redirect()->route('straus-survei.completion-options');
         }
 
         return view('users.acp.index', compact('currentQuestion', 'currentQuestionIndex', 'hasNext', 'section'));

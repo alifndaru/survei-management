@@ -11,6 +11,13 @@ use Illuminate\Support\Str;
 
 class StrausSurveiController extends Controller
 {
+    public function finish()
+    {
+        // Delete session cookies
+        session()->forget(['completed_straus_survey', 'completed_acp_survey', 'completed_stress_scale_survey', 'user_id']);
+
+        return view('users.finish');
+    }
     public function index(Request $request)
     {
         if (session('user_id') === null) {
@@ -50,6 +57,8 @@ class StrausSurveiController extends Controller
             } else {
                 // Jika sudah selesai semua, arahkan ke halaman akhir atau halaman sukses
                 // return redirect()->route('straus-survei.index');
+                session(['completed_straus_survey' => true]);
+
                 return redirect()->route('straus-survei.completion-options');
             }
         }
@@ -100,8 +109,47 @@ class StrausSurveiController extends Controller
         return redirect()->route('straus-survei.index', ['q' => $request->input('current_question_index') + 1]);
     }
 
-    public function showCompletionOptions()
+    public function showCompletionOptions1()
     {
         return view('users.straus.completion-options');
+    }
+    public function showCompletionOptions()
+    {
+        // Cek apakah pengguna sudah menyelesaikan survei Straus di session
+        if (!session()->has('completed_straus_survey')) {
+            return redirect()->route('straus-survei.index');
+        }
+
+        // Tampilkan halaman Completion Options
+        return view('users.straus.completion-options', [
+            'hasCompletedAcp' => session('completed_acp_survey', false),
+            'hasCompletedStressScale' => session('completed_stress_scale_survey', false),
+            'hasCompletedStraus' => session('completed_straus_survey', false)
+        ]);
+    }
+
+
+    public function completeSurvey(Request $request)
+    {
+        // Cek survei mana yang dipilih pengguna
+        if ($request->question_type === '1') {
+            // Tandai Straus sebagai selesai di session
+            session(['completed_straus_survey' => true]);
+
+            // Arahkan ke halaman opsi untuk melanjutkan ke ACP atau Skala Stress
+            return redirect()->route('straus-survei.completion-options');
+        } elseif ($request->question_type === '2') {
+            // Tandai ACP sebagai selesai di session
+            session(['completed_acp_survey' => true]);
+
+            // Jika ACP selesai, arahkan ke survei Skala Stress
+            return redirect()->route('skala-stress-survei.index');
+        } elseif ($request->question_type === '3') {
+            // Tandai Skala Stress sebagai selesai di session
+            session(['completed_stress_scale_survey' => true]);
+            session()->flush(); // This line deletes all session data
+            // Jika semua survei selesai, arahkan ke halaman akhir atau beri pesan sukses
+            return redirect()->route('finish');
+        }
     }
 }
