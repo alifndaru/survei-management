@@ -232,6 +232,8 @@
         let dataSection2 = @json($dataSection2);
         let labelsAcp = @json($labelsAcp);
         let dataAcp = @json($dataAcp);
+        let dataSkala = @json($dataSkala);
+        let labelsSkala = @json($labelsSkala);
         let chart;
         const chartContainer = document.getElementById('chartContainer');
         const message = document.getElementById('message');
@@ -298,6 +300,12 @@
                 newData = dataAcp;
                 exportButtonContainer.style.display = 'block'; // Show export button for category 2 (ACP)
                 exportButton.href = "{{ route('export-user-answers-acp') }}"; // Update export button route for ACP
+            } else if (category == 3) {
+                newLabels = labelsSkala;
+                newData = dataSkala;
+                exportButtonContainer.style.display = 'block'; // Show export button for category 2 (ACP)
+                exportButton.href = "{{ route('export-user-answers-skala') }}"; // Update export button route for ACP
+
             } else {
                 // Default: No data
                 newLabels = [];
