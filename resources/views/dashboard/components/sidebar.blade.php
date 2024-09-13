@@ -21,6 +21,10 @@
                 <a class="nav-link" href="{{ url('skala-stress') }}"><i class="fas fa-home"></i> <span>Skala
                         Stress</span></a>
             </li>
+            <li class="{{ Request::is('all-answers') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ url('all-answers') }}"><i class="fas fa-home"></i> <span>All
+                        Answers</span></a>
+            </li>
             <li>
                 <form action="{{ route('users.logout') }}" method="POST" id="logout-form">
                     @csrf

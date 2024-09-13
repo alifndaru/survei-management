@@ -53,6 +53,10 @@ Route::middleware(['auth', 'IsAdmin'])->group(function () {
     Route::get('/export-user-answers-Acp', [DashboardController::class, 'AcpExportExcel'])->name('export-user-answers-acp');
     Route::get('/export-user-answers-Skala', [DashboardController::class, 'SkalaExportExcel'])->name('export-user-answers-skala');
 
+
+    // management answers
+    Route::get('/all-answers', [DashboardController::class, 'allAnswers'])->name('all-answers');
+
     // Straus CRUD
     Route::prefix('straus')->name('straus.')->group(function () {
         Route::get('/', [StrausController::class, 'index'])->name('index');

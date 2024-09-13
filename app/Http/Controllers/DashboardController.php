@@ -6,6 +6,7 @@ use App\Exports\AcpAnswerExport;
 use App\Exports\SkalaStressExport;
 use App\Exports\UserAnswersExport;
 use App\Models\Answare;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -71,5 +72,48 @@ class DashboardController extends Controller
     public function SkalaExportExcel()
     {
         return Excel::download(new SkalaStressExport, 'user_answers_skala.xlsx');
+    }
+
+    public function showAllAnswers(Request $request)
+    {
+        $categories = Category::all(); // Pastikan ini mengambil data kategori
+        // Logika lain untuk mengambil jawaban, jika ada
+        return view('dashboard.pages.all-answers', compact('categories'));
+    }
+
+    public function allAnswers1(Request $request)
+    {
+        $categoryId = $request->get('category');
+        $answers = [];
+
+        if ($categoryId) {
+            // Pastikan untuk memuat relasi 'question' juga
+            $answers = Answare::with('question')->where('category_id', $categoryId)->orderBy('created_at', 'desc')->paginate(10);
+        }
+
+        // Ambil semua kategori untuk dropdown
+        $categories = Category::all();
+
+        return view('dashboard.pages.all-answers', compact('answers', 'categories'));
+    }
+    public function allAnswers(Request $request)
+    {
+        // Mendapatkan category id dari request
+        $categoryId = $request->get('category');
+        $answers = [];
+
+        if ($categoryId) {
+            // Query untuk mendapatkan jawaban berdasarkan kategori yang dipilih
+            $answers = Answare::with('question')
+                ->where('category_id', $categoryId)
+                ->orderBy('created_at', 'desc')
+                ->paginate(10); // Menggunakan pagination dengan 10 item per halaman
+        }
+
+        // Mengambil semua kategori untuk dropdown
+        $categories = Category::all();
+
+        // Mengirim data ke view
+        return view('dashboard.pages.all-answers', compact('answers', 'categories'));
     }
 }
