@@ -48,16 +48,19 @@
 
                         <form action="{{ route('straus.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-
-                            <!-- Kategori Selection -->
                             <div class="form-group">
                                 <label for="category_id">Kategori</label>
-                                <select name="category_id" id="category_id" class="form-control" required>
-                                    <option value="" disabled selected>Pilih Kategori</option>
+                                <select name="category_id" id="category_id" class="form-control" disabled>
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @if ($category->id == 1)
+                                            <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="category_id" value="1">
+                                @if ($errors->has('category_id'))
+                                    <span class="help-block">{{ $errors->first('category_id') }}</span>
+                                @endif
                             </div>
 
                             <!-- Pertanyaan -->
