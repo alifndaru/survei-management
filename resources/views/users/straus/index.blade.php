@@ -51,7 +51,7 @@
         <section class="section">
             <div class="section-header mb-4">
                 <h1 class="display-5 fw-bold text-center text-primary">
-                    {{ $section == 1 ? 'Section 1: ' : 'Section 2: ' }}
+                    {{ $section == 1 ? 'Straus Section 1: ' : 'Straus Section 2: ' }}
                     {{ $currentQuestion->question_text }}
                 </h1>
             </div>
@@ -97,6 +97,7 @@
                                     </div>
                                 </div>
                             @elseif($section == 2)
+                                <i>*Isi setidaknya salah satu</i>
                                 @if ($currentQuestion->options->isNotEmpty())
                                     <div class="mb-4">
                                         <div class="row row-cols-1 row-cols-md-2 g-4">
@@ -116,7 +117,8 @@
                                                                         {!! $option->option_url !!}
                                                                     </div>
                                                                     <!-- Option description -->
-                                                                    <p class="text-muted">{{ $option->option_description }}
+                                                                    <p class="text-muted">
+                                                                        {{ $option->option_description }}
                                                                     </p>
                                                                 </label>
                                                             </div>

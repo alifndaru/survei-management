@@ -113,38 +113,59 @@ class StrausSurveiController extends Controller
     {
         return view('users.straus.completion-options');
     }
+    // public function showCompletionOptions()
+    // {
+    //     // Cek apakah pengguna sudah menyelesaikan survei Straus di session
+    //     if (!session()->has('completed_straus_survey')) {
+    //         return redirect()->route('straus-survei.index');
+    //     }
+
+    //     // Tampilkan halaman Completion Options
+    //     return view('users.straus.completion-options', [
+    //         'hasCompletedAcp' => session('completed_acp_survey', false),
+    //         'hasCompletedStressScale' => session('completed_stress_scale_survey', false),
+    //         'hasCompletedStraus' => session('completed_straus_survey', false)
+    //     ]);
+    // }
+
     public function showCompletionOptions()
     {
-        // Cek apakah pengguna sudah menyelesaikan survei Straus di session
-        if (!session()->has('completed_straus_survey')) {
-            return redirect()->route('straus-survei.index');
+        // Cek apakah pengguna sudah menyelesaikan survei di session
+        $hasCompletedAcp = session('completed_acp_survey', false);
+        $hasCompletedStressScale = session('completed_stress_scale_survey', false);
+        $hasCompletedStraus = session('completed_straus_survey', false);
+        // dd(session()->all());
+
+        if ($hasCompletedAcp && $hasCompletedStressScale && $hasCompletedStraus) {
+            return redirect()->route('finish'); // Ganti 'finish' dengan route nama yang sesuai
         }
 
         // Tampilkan halaman Completion Options
         return view('users.straus.completion-options', [
-            'hasCompletedAcp' => session('completed_acp_survey', false),
-            'hasCompletedStressScale' => session('completed_stress_scale_survey', false),
-            'hasCompletedStraus' => session('completed_straus_survey', false)
+            'hasCompletedAcp' => $hasCompletedAcp,
+            'hasCompletedStressScale' => $hasCompletedStressScale,
+            'hasCompletedStraus' => $hasCompletedStraus
         ]);
     }
+
 
 
     public function completeSurvey(Request $request)
     {
         // Cek survei mana yang dipilih pengguna
-        if ($request->question_type === '1') {
+        if ($request->category_id === '1') {
             // Tandai Straus sebagai selesai di session
             session(['completed_straus_survey' => true]);
 
             // Arahkan ke halaman opsi untuk melanjutkan ke ACP atau Skala Stress
             return redirect()->route('straus-survei.completion-options');
-        } elseif ($request->question_type === '2') {
+        } elseif ($request->category_id === '2') {
             // Tandai ACP sebagai selesai di session
             session(['completed_acp_survey' => true]);
 
             // Jika ACP selesai, arahkan ke survei Skala Stress
             return redirect()->route('skala-stress-survei.index');
-        } elseif ($request->question_type === '3') {
+        } elseif ($request->category_id === '3') {
             // Tandai Skala Stress sebagai selesai di session
             session(['completed_stress_scale_survey' => true]);
             session()->flush(); // This line deletes all session data

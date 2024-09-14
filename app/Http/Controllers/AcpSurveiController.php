@@ -38,8 +38,8 @@ class AcpSurveiController extends Controller
             session(['completed_acp_survey' => true]);
 
             // Arahkan ke survei Skala Stress jika ACP selesai
-            return redirect()->route('skala-stress-survei.index');
-            // return redirect()->route('straus-survei.completion-options');
+            // return redirect()->route('skala-stress-survei.index');
+            return redirect()->route('straus-survei.completion-options');
         }
 
         return view('users.acp.index', compact('currentQuestion', 'currentQuestionIndex', 'hasNext', 'section'));

@@ -39,8 +39,8 @@ class SkalaStressSurveiController extends Controller
             session(['completed_stress_scale_survey' => true]);
 
             // Arahkan ke halaman akhir atau berikan pesan selesai
-            return redirect()->route('finish');
-            // return redirect()->route('straus-survei.completion-options');
+            // return redirect()->route('finish');
+            return redirect()->route('straus-survei.completion-options');
         }
 
         return view('users.skala-stress.index', compact('currentQuestion', 'currentQuestionIndex', 'hasNext', 'section'));

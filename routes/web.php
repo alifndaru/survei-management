@@ -42,7 +42,7 @@ Route::get('/skala-stress-survei/finish', [SkalaStressSurveiController::class, '
 // Halaman pilihan survei
 // Route::get('/completion-options', [StrausSurveiController::class, 'showCompletionOptions'])->name('completion-options');
 
-Route::get('/finish-dari-straus', [StrausSurveiController::class, 'finish'])->name('finish');
+Route::get('/finish', [StrausSurveiController::class, 'finish'])->name('finish');
 
 
 // Admin routes
