@@ -20,8 +20,11 @@
                 <div class="row">
                     <div class="form-group col-6">
                         <label for="age">Umur</label>
-                        <input id="age" type="text" class="form-control" name="age" autofocus>
+                        <input id="age" type="number" class="form-control" name="age" autofocus>
                     </div>
+                    @if ($errors->has('age'))
+                        <span class="help-block">{{ $errors->first('age') }}</span>
+                    @endif
                     <div class="form-group col-6">
                         <label for="gender">Gender</label>
                         <select name="gender" id="gender" class="form-control">

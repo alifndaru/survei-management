@@ -50,7 +50,7 @@
                             @csrf
 
                             <!-- Kategori Selection -->
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label for="category_id">Kategori</label>
                                 <select name="category_id" id="category_id" class="form-control" required>
                                     <option value="" disabled selected>Pilih Kategori</option>
@@ -58,6 +58,20 @@
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
+                            </div> --}}
+                            <div class="form-group">
+                                <label for="category_id">Kategori</label>
+                                <select name="category_id" id="category_id" class="form-control" disabled>
+                                    @foreach ($categories as $category)
+                                        @if ($category->id == 1)
+                                            <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                                <input type="hidden" name="category_id" value="1">
+                                @if ($errors->has('category_id'))
+                                    <span class="help-block">{{ $errors->first('category_id') }}</span>
+                                @endif
                             </div>
 
                             <!-- Pertanyaan -->
@@ -67,7 +81,7 @@
                             </div>
 
                             <!-- Section Selection -->
-                            <div class="form-group" id="section_div" style="display: none;">
+                            <div class="form-group" id="section_div">
                                 <label for="section">Section</label>
                                 <select name="section" id="section" class="form-control" required>
                                     <option value="" disabled selected>Pilih Section</option>
@@ -103,14 +117,14 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $('#category_id').change(function() {
-                var strausId = '1'; // Adjust based on your category ID for Straus
-                if ($(this).val() == strausId) {
-                    $('#section_div').show();
-                } else {
-                    $('#section_div').hide();
-                }
-            });
+            // $('#category_id').change(function() {
+            //     var strausId = '1'; // Adjust based on your category ID for Straus
+            //     if ($(this).val() == strausId) {
+            //         $('#section_div').show();
+            //     } else {
+            //         $('#section_div').hide();
+            //     }
+            // });
 
             function createOptionGroup() {
                 return `
