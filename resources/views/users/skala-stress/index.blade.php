@@ -65,6 +65,11 @@
                             <input type="hidden" name="category_id" value="{{ $currentQuestion->category_id }}">
 
                             @if ($currentQuestion->options->isNotEmpty())
+                                @if ($errors->has('answer'))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ $errors->first('answer') }}
+                                    </div>
+                                @endif
                                 <div class="mb-4">
                                     <ul class="list-group list-group-flush text-center">
                                         @foreach ($currentQuestion->options as $option)
@@ -109,6 +114,7 @@
                                         <label class="form-check-label" for="SS">Sangat Setuju (SS)</label>
                                     </div>
                                 </div>
+
                             </div>
 
                             <div class="text-center">

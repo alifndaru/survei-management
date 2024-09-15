@@ -71,10 +71,13 @@ class StrausSurveiController extends Controller
         // Validasi input
         $request->validate([
             'question_id' => 'required|exists:questions,id',
-            'answer' => 'nullable|in:pernah,tidak pernah', // validasi section 1
-            'answers' => 'nullable|array', // Validasi answers sebagai array
+            'answer' => $request->input('section') == 1 ? 'required|in:pernah,tidak pernah' : 'nullable', // validasi answer required untuk section 1
+            'answers' => $request->input('section') == 2 ? 'required|array|min:1' : 'nullable', // validasi answers required untuk section 2
             'answers.*' => 'string', // Validasi setiap answer harus string
             'category_id' => 'required|exists:categories,id'
+        ], [
+            'answer.required' => 'Jawaban harus diisi',
+            'answers.required' => 'Jawaban harus diisi'
         ]);
 
         $userId = session('user_id');
@@ -113,20 +116,6 @@ class StrausSurveiController extends Controller
     {
         return view('users.straus.completion-options');
     }
-    // public function showCompletionOptions()
-    // {
-    //     // Cek apakah pengguna sudah menyelesaikan survei Straus di session
-    //     if (!session()->has('completed_straus_survey')) {
-    //         return redirect()->route('straus-survei.index');
-    //     }
-
-    //     // Tampilkan halaman Completion Options
-    //     return view('users.straus.completion-options', [
-    //         'hasCompletedAcp' => session('completed_acp_survey', false),
-    //         'hasCompletedStressScale' => session('completed_stress_scale_survey', false),
-    //         'hasCompletedStraus' => session('completed_straus_survey', false)
-    //     ]);
-    // }
 
     public function showCompletionOptions()
     {

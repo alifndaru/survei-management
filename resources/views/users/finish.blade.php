@@ -55,7 +55,7 @@
 <body>
     <div class="container">
         <h1>Thank You!</h1>
-        <p>Your submission has been received.</p>
+        <p>Sudah mengiisi semua survei yang ada.</p>
         <a href="{{ route('users.index') }}" class="btn">Back to Home</a>
     </div>
 </body>
