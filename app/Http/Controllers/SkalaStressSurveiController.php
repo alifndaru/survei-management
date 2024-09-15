@@ -53,6 +53,8 @@ class SkalaStressSurveiController extends Controller
             'answer' => 'required|string|in:Sangat Tidak Setuju,Tidak Setuju,Netral,Setuju,Sangat Setuju',
             'category_id' => 'required|exists:categories,id',
             'current_question_index' => 'required|integer'
+        ], [
+            'answer' => 'jawaban harus diisi'
         ]);
 
         $userId = session('user_id');

@@ -67,6 +67,11 @@
                             <input type="hidden" name="category_id" value="{{ $currentQuestion->category_id }}">
 
                             @if ($section == 1)
+                                @if ($errors->has('answer'))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ $errors->first('answer') }}
+                                    </div>
+                                @endif
                                 @if ($currentQuestion->options->isNotEmpty())
                                     <div class="mb-4">
                                         <ul class="list-group list-group-flush text-center">
@@ -98,6 +103,11 @@
                                 </div>
                             @elseif($section == 2)
                                 <i>*Isi setidaknya salah satu</i>
+                                @if ($errors->has('answers'))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ $errors->first('answers') }}
+                                    </div>
+                                @endif
                                 @if ($currentQuestion->options->isNotEmpty())
                                     <div class="mb-4">
                                         <div class="row row-cols-1 row-cols-md-2 g-4">

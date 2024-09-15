@@ -52,6 +52,8 @@ class AcpSurveiController extends Controller
             'answer' => 'required|in:pernah,tidak pernah|string',
             'category_id' => 'required|exists:categories,id',
             'current_question_index' => 'required|integer'
+        ], [
+            'answer' => 'Jawaban harus diisi'
         ]);
 
         $userId = session('user_id');
