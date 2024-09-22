@@ -37,7 +37,7 @@
                                         <th>Question Text</th>
                                         <th>Section</th>
                                         <th>Type</th>
-                                        <th>Options description video/Gif</th>
+                                        <th>Options description</th>
                                         <th>Created At</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -53,9 +53,7 @@
                                             <td>
                                                 @foreach ($question->options as $option)
                                                     <div>
-                                                        <a href="{{ $option->option_url }}" target="_blank">
-                                                            {{ $option->option_description }}
-                                                        </a>
+                                                        <p>{{ $option->option_description }}</p>
                                                     </div>
                                                 @endforeach
                                             </td>
