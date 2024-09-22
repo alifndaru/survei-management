@@ -96,18 +96,11 @@
                                 @endif
                             </div>
                             <div class="option-group">
-                                <textarea name="option_url" class="form-control mb-2 option-input" placeholder="Enter Option URL"></textarea>
-                                @if ($errors->has('option_url'))
-                                    <span class="help-block">{{ $errors->first('option_url') }}</span>
-                                @endif
                                 <input type="text" name="option_description" class="form-control mb-2"
-                                    placeholder="Option Description">
+                                    placeholder="Isi seperti pertanyaan">
                                 @if ($errors->has('option_description'))
                                     <span class="help-block">{{ $errors->first('option_description') }}</span>
                                 @endif
-                                <div class="thumbnail-preview mb-2">
-                                    <span>Preview will appear here...</span>
-                                </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Simpan Pertanyaan</button>
                         </form>
@@ -119,17 +112,5 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            $(document).on('input', '.option-input', function() {
-                var embedCode = $(this).val();
-                var previewContainer = $(this).siblings('.thumbnail-preview');
-                if (embedCode.trim() === '') {
-                    previewContainer.html('<span>Preview will appear here...</span>');
-                } else {
-                    previewContainer.html(embedCode);
-                }
-            });
-        });
-    </script>
+
 @endpush

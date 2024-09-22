@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('options', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('question_id');
-            $table->text('option_url')->nullable();
-            $table->string('option_description');
-            $table->timestamps();
+        Schema::table('selected_answers', function (Blueprint $table) {
+            $table->integer('nilai')->nullable();
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('options');
+        Schema::table('selected_answers', function (Blueprint $table) {
+            $table->dropColumn('nilai');
+        });
     }
 };

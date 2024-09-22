@@ -74,9 +74,6 @@
                                     <ul class="list-group list-group-flush text-center">
                                         @foreach ($currentQuestion->options as $option)
                                             <li class="list-group-item">
-                                                <div class="video-container">
-                                                    {!! $option->option_url !!}
-                                                </div>
                                                 <p class="mb-1 text-muted">{{ $option->option_description }}</p>
                                             </li>
                                         @endforeach
@@ -84,26 +81,78 @@
                                 </div>
                             @endif
 
-                            <div class="mb-4 text-center">
-                                <label class="form-label fw-semibold text-secondary">Your Answer:</label>
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                                    <div class="form-check me-2">
-                                        <input class="form-check-input" type="radio" name="answer" id="pernah"
-                                            value="pernah">
-                                        <label class="form-check-label" for="pernah">pernah</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="answer" id="tidak pernah"
-                                            value="tidak pernah">
-                                        <label class="form-check-label" for="tidak pernah">tidak pernah</label>
+                           {{-- <!-- Jawaban user -->
+                                <div class="mb-4 text-center">
+                                    <label class="form-label fw-semibold text-secondary">Your Answer:</label>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                        <div class="form-check me-2">
+                                            <input class="form-check-input" type="radio" name="answer" id="pernah"
+                                                value="pernah" onchange="handleAnswerChange('pernah')">
+                                            <label class="form-check-label" for="pernah">Pernah</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="answer" id="tidak-pernah"
+                                                value="tidak pernah" onchange="handleAnswerChange('tidak pernah')">
+                                            <label class="form-check-label" for="tidak-pernah">Tidak Pernah</label>
+                                        </div>
+                                    <input type="hidden" name="nilai" id="nilai" value="">
                                     </div>
                                 </div>
 
-                            </div>
+                                <!-- Opsi tambahan jika memilih "Pernah" -->
+                                <div id="pernah-options" class="mb-4 text-center" style="display: none;">
+                                    <label class="form-label fw-semibold text-secondary">Seberapa Sering:</label>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                        <div class="form-check me-2">
+                                            <input class="form-check-input" type="radio" name="frequency" value="selalu"
+                                                onchange="setNilai(4)">
+                                            <label class="form-check-label" for="selalu">Selalu</label>
+                                        </div>
+                                        <div class="form-check me-2">
+                                            <input class="form-check-input" type="radio" name="frequency" value="sering"
+                                                onchange="setNilai(3)">
+                                            <label class="form-check-label" for="sering">Sering</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="frequency" value="jarang"
+                                                onchange="setNilai(2)">
+                                            <label class="form-check-label" for="jarang">Jarang</label>
+                                        </div>
+                                    </div>
+                                </div> --}}
+                                <!-- Jawaban user -->
+                           <!-- Jawaban user -->
+<div class="mb-4 text-center">
+    <label class="form-label fw-semibold text-secondary">Your Answer:</label>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+        <div class="form-check me-2">
+            <input class="form-check-input" type="radio" name="answer" id="sangat-sesuai" value="sangat sesuai" onchange="setNilai(5)">
+            <label class="form-check-label" for="sangat-sesuai">Sangat Sesuai</label>
+        </div>
+        <div class="form-check me-2">
+            <input class="form-check-input" type="radio" name="answer" id="sesuai" value="sesuai" onchange="setNilai(4)">
+            <label class="form-check-label" for="sesuai">Sesuai</label>
+        </div>
+        <div class="form-check me-2">
+            <input class="form-check-input" type="radio" name="answer" id="netral" value="netral" onchange="setNilai(3)">
+            <label class="form-check-label" for="netral">Netral</label>
+        </div>
+        <div class="form-check me-2">
+            <input class="form-check-input" type="radio" name="answer" id="tidak-sesuai" value="tidak sesuai" onchange="setNilai(2)">
+            <label class="form-check-label" for="tidak-sesuai">Tidak Sesuai</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="answer" id="sangat-tidak-sesuai" value="sangat tidak sesuai" onchange="setNilai(1)">
+            <label class="form-check-label" for="sangat-tidak-sesuai">Sangat Tidak Sesuai</label>
+        </div>
+        <input type="hidden" name="nilai" id="nilai" value="">
+    </div>
+</div>
+
 
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary btn-lg">
-                                    {{ $hasNext ? 'Next' : 'Finish' }}
+                                    {{ $hasNext ? 'Next' : 'Continue to Skala stress' }}
                                 </button>
                             </div>
                         </form>
@@ -115,5 +164,14 @@
 @endsection
 
 @push('scripts')
-    <!-- Bootstrap JS -->
+<script>
+    function setNilai(nilai) {
+    const nilaiInput = document.getElementById('nilai');
+    if (nilaiInput) {
+        nilaiInput.value = nilai;
+    }
+}
+
+</script>
+
 @endpush

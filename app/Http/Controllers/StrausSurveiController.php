@@ -8,13 +8,14 @@ use App\Models\Questions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class StrausSurveiController extends Controller
 {
     public function finish()
     {
         // Delete session cookies
-        session()->forget(['completed_straus_survey', 'completed_acp_survey', 'completed_stress_scale_survey', 'user_id']);
+        session()->forget('user_id');
 
         return view('users.finish');
     }
@@ -57,9 +58,10 @@ class StrausSurveiController extends Controller
             } else {
                 // Jika sudah selesai semua, arahkan ke halaman akhir atau halaman sukses
                 // return redirect()->route('straus-survei.index');
-                session(['completed_straus_survey' => true]);
+                // session(['completed_straus_survey' => true]);
 
-                return redirect()->route('straus-survei.completion-options');
+                return redirect()->route('acp-survei.index');
+                // return redirect()->route('straus-survei.completion-options');
             }
         }
 
@@ -71,10 +73,10 @@ class StrausSurveiController extends Controller
         // Validasi input
         $request->validate([
             'question_id' => 'required|exists:questions,id',
-            'answer' => $request->input('section') == 1 ? 'required|in:pernah,tidak pernah' : 'nullable', // validasi answer required untuk section 1
-            'answers' => $request->input('section') == 2 ? 'required|array|min:1' : 'nullable', // validasi answers required untuk section 2
-            'answers.*' => 'string', // Validasi setiap answer harus string
-            'category_id' => 'required|exists:categories,id'
+            'answer' => $request->input('section') == 1 ? 'required|in:pernah,tidak pernah' : 'nullable',
+            'answers' => $request->input('section') == 2 ? 'required|array|min:1' : 'nullable',
+            'answers.*' => 'string',
+            'category_id' => 'required|exists:categories,id',
         ], [
             'answer.required' => 'Jawaban harus diisi',
             'answers.required' => 'Jawaban harus diisi'
@@ -83,34 +85,73 @@ class StrausSurveiController extends Controller
         $userId = session('user_id');
 
         if (!$userId) {
-            return redirect()->route('users.index'); // Arahkan ke halaman registrasi jika user_id tidak ada
+            return redirect()->route('users.index');
         }
 
         // Simpan jawaban untuk Section 1
         if ($request->filled('answer')) {
+            $answer = $request->input('answer');
+            if ($answer === 'pernah') {
+                $answer = $request->input('frequency');
+            }
+            $nilai = $this->getNilaiFromFrequency($answer);
             Answare::create([
                 'user_id' => $userId,
                 'question_id' => $request->input('question_id'),
-                'answer' => $request->input('answer'),
-                'category_id' => $request->input('category_id')
+                'answer' => $answer,
+                'category_id' => $request->input('category_id'),
+                'nilai' => $nilai
             ]);
         }
 
-        // Simpan jawaban untuk Section 2
         if ($request->filled('answers')) {
             foreach ($request->input('answers', []) as $answerDescription) {
+                if ($answerDescription === 'tidak pernah') {
+                    $frequency = 'tidak pernah';
+                    $nilai = 1;
+                } else {
+                    $frequencyKey = "frequency_" . str_replace(' ', '_', trim($answerDescription));
+                    $frequency = $request->input($frequencyKey);
+                    // Tentukan nilai berdasarkan frekuensi
+                    if ($frequency === 'selalu') {
+                        $nilai = 4;
+                    } elseif ($frequency === 'sering') {
+                        $nilai = 3;
+                    } elseif ($frequency === 'jarang') {
+                        $nilai = 2;
+                    } else {
+                        $nilai = 1;
+                    }
+                }
+                // Simpan jawaban
                 Answare::create([
                     'user_id' => $userId,
                     'question_id' => $request->input('question_id'),
-                    'answer' => $answerDescription,
-                    'category_id' => $request->input('category_id')
+                    'answer' => $frequency,
+                    'category_id' => $request->input('category_id'),
+                    'nilai' => $nilai,
                 ]);
             }
         }
-
         // Redirect ke pertanyaan berikutnya atau ke halaman selesai
         return redirect()->route('straus-survei.index', ['q' => $request->input('current_question_index') + 1]);
     }
+
+    private function getNilaiFromFrequency($frequency)
+    {
+        switch ($frequency) {
+            case 'selalu':
+                return 4;
+            case 'sering':
+                return 3;
+            case 'jarang':
+                return 2;
+            case 'tidak pernah':
+            default:
+                return 1; // Default untuk 'tidak pernah'
+        }
+    }
+
 
     public function showCompletionOptions1()
     {

@@ -35,11 +35,12 @@ class AcpSurveiController extends Controller
             $hasNext = ($currentQuestionIndex + 1) < $acp->count();
             $section = 1;
         } else {
-            session(['completed_acp_survey' => true]);
+            // session(['completed_acp_survey' => true]);
 
             // Arahkan ke survei Skala Stress jika ACP selesai
             // return redirect()->route('skala-stress-survei.index');
-            return redirect()->route('straus-survei.completion-options');
+
+            return redirect()->route('skala-stress-survei.index');
         }
 
         return view('users.acp.index', compact('currentQuestion', 'currentQuestionIndex', 'hasNext', 'section'));
@@ -49,9 +50,9 @@ class AcpSurveiController extends Controller
     {
         $request->validate([
             'question_id' => 'required|exists:questions,id',
-            'answer' => 'required|in:pernah,tidak pernah|string',
+            'answer' => 'required|in:sangat sesuai,sesuai,netral,tidak sesuai,sangat tidak sesuai|string',
             'category_id' => 'required|exists:categories,id',
-            'current_question_index' => 'required|integer'
+            'current_question_index' => 'required|integer',
         ], [
             'answer' => 'Jawaban harus diisi'
         ]);
@@ -62,14 +63,36 @@ class AcpSurveiController extends Controller
             return redirect()->route('users.index');
         }
 
-        Answare::create([
-            'user_id' => $userId,
-            'question_id' => $request->input('question_id'),
-            'answer' => $request->input('answer'),
-            'category_id' => $request->input('category_id')
-        ]);
+        if ($request->filled('answer')) {
+            $answer = $request->input('answer');
+            $nilai = $this->getNilaiFromFrequency($answer);
 
-        // Pastikan 'q' adalah parameter yang benar untuk menunjukkan indeks pertanyaan saat ini
+            Answare::create([
+                'user_id' => $userId,
+                'question_id' => $request->input('question_id'),
+                'answer' => $answer,
+                'category_id' => $request->input('category_id'),
+                'nilai' => $nilai
+            ]);
+        }
+
         return redirect()->route('acp-survei.index', ['q' => $request->input('current_question_index') + 1]);
+    }
+
+    private function getNilaiFromFrequency($answer)
+    {
+        switch ($answer) {
+            case 'sangat sesuai':
+                return 5;
+            case 'sesuai':
+                return 4;
+            case 'netral':
+                return 3;
+            case 'tidak sesuai':
+                return 2;
+            case 'sangat tidak sesuai':
+            default:
+                return 1;
+        }
     }
 }
