@@ -49,9 +49,9 @@ class AcpSurveiController extends Controller
     {
         $request->validate([
             'question_id' => 'required|exists:questions,id',
-            'answer' => 'required|in:pernah,tidak pernah|string',
+            'answer' => 'required|in:sangat sesuai,sesuai,netral,tidak sesuai,sangat tidak sesuai|string',
             'category_id' => 'required|exists:categories,id',
-            'current_question_index' => 'required|integer'
+            'current_question_index' => 'required|integer',
         ], [
             'answer' => 'Jawaban harus diisi'
         ]);
@@ -62,13 +62,10 @@ class AcpSurveiController extends Controller
             return redirect()->route('users.index');
         }
 
-
         if ($request->filled('answer')) {
             $answer = $request->input('answer');
-            if ($answer === 'pernah') {
-                $answer = $request->input('frequency');
-            }
             $nilai = $this->getNilaiFromFrequency($answer);
+
             Answare::create([
                 'user_id' => $userId,
                 'question_id' => $request->input('question_id'),
@@ -77,22 +74,24 @@ class AcpSurveiController extends Controller
                 'nilai' => $nilai
             ]);
         }
-        // Pastikan 'q' adalah parameter yang benar untuk menunjukkan indeks pertanyaan saat ini
+
         return redirect()->route('acp-survei.index', ['q' => $request->input('current_question_index') + 1]);
     }
 
-    private function getNilaiFromFrequency($frequency)
+    private function getNilaiFromFrequency($answer)
     {
-        switch ($frequency) {
-            case 'selalu':
+        switch ($answer) {
+            case 'sangat sesuai':
+                return 5;
+            case 'sesuai':
                 return 4;
-            case 'sering':
+            case 'netral':
                 return 3;
-            case 'jarang':
+            case 'tidak sesuai':
                 return 2;
-            case 'tidak pernah':
+            case 'sangat tidak sesuai':
             default:
-                return 1; // Default untuk 'tidak pernah'
+                return 1;
         }
     }
 }
