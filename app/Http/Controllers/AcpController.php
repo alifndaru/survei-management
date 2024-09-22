@@ -28,7 +28,6 @@ class AcpController extends Controller
             'question_type' => 'required|in:1,2',
             'question_text' => 'required|string',
             'section' => 'required|in:1,2',
-            'option_url' => 'required',
             'option_description' => 'required',
         ]);
 
@@ -65,7 +64,6 @@ class AcpController extends Controller
             'question_text' => 'required|string',
             'section' => 'required|in:1,2',
             'question_type' => 'required|in:1,2',
-            'option_url' => 'required|string',
             'option_description' => 'required|string',
         ]);
 
@@ -82,14 +80,11 @@ class AcpController extends Controller
 
         if ($option) {
             // Update existing option
-            $option->option_url = $request->input('option_url');
             $option->option_description = $request->input('option_description');
             $option->save();
         } else {
             // If no option exists, create a new one
-            Options::create([
-                'question_id' => $question->id,
-                'option_url' => $request->input('option_url'),
+            Options::create(['question_id' => $question->id,
                 'option_description' => $request->input('option_description'),
             ]);
         }

@@ -62,14 +62,37 @@ class AcpSurveiController extends Controller
             return redirect()->route('users.index');
         }
 
-        Answare::create([
-            'user_id' => $userId,
-            'question_id' => $request->input('question_id'),
-            'answer' => $request->input('answer'),
-            'category_id' => $request->input('category_id')
-        ]);
 
+        if ($request->filled('answer')) {
+            $answer = $request->input('answer');
+            if ($answer === 'pernah') {
+                $answer = $request->input('frequency');
+            }
+            $nilai = $this->getNilaiFromFrequency($answer);
+            Answare::create([
+                'user_id' => $userId,
+                'question_id' => $request->input('question_id'),
+                'answer' => $answer,
+                'category_id' => $request->input('category_id'),
+                'nilai' => $nilai
+            ]);
+        }
         // Pastikan 'q' adalah parameter yang benar untuk menunjukkan indeks pertanyaan saat ini
         return redirect()->route('acp-survei.index', ['q' => $request->input('current_question_index') + 1]);
+    }
+
+    private function getNilaiFromFrequency($frequency)
+    {
+        switch ($frequency) {
+            case 'selalu':
+                return 4;
+            case 'sering':
+                return 3;
+            case 'jarang':
+                return 2;
+            case 'tidak pernah':
+            default:
+                return 1; // Default untuk 'tidak pernah'
+        }
     }
 }
