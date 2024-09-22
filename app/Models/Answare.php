@@ -11,7 +11,7 @@ class Answare extends Model
 
     protected $table = 'selected_answers';
 
-    protected $fillable = ['user_id', 'category_id', 'question_id', 'answer'];
+    protected $fillable = ['user_id', 'category_id', 'question_id', 'answer', 'nilai'];
 
     public function question()
     {
