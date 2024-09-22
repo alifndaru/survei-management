@@ -31,7 +31,8 @@ class AcpAnswerExport implements FromQuery, WithHeadings, WithStyles, WithEvents
                 'users.kecamatan as kecamatan',
                 'users.gender as gender',
                 'questions.question_text as question_text',
-                'selected_answers.answer as answer'
+            'selected_answers.answer as answer',
+            'selected_answers.nilai as nilai'
             )
             ->orderBy('users.id') // Sort by user to group answers together
             ->orderBy('questions.id') // Sort by questions
@@ -40,7 +41,7 @@ class AcpAnswerExport implements FromQuery, WithHeadings, WithStyles, WithEvents
 
     public function headings(): array
     {
-        return ["User ID", "Age", "Province", "City", "Kelurahan", "Kecamatan", "Gender", "Question", "Answer"];
+        return ["User ID", "Age", "Province", "City", "Kelurahan", "Kecamatan", "Gender", "Question", "Answer", "Nilai"];
     }
 
     // Applying styles to merge cells
