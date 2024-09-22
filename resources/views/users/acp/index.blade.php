@@ -152,7 +152,7 @@
 
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary btn-lg">
-                                    {{ $hasNext ? 'Next' : 'Finish' }}
+                                    {{ $hasNext ? 'Next' : 'Continue to Skala stress' }}
                                 </button>
                             </div>
                         </form>

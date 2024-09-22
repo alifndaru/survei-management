@@ -74,49 +74,38 @@
                                     <ul class="list-group list-group-flush text-center">
                                         @foreach ($currentQuestion->options as $option)
                                             <li class="list-group-item">
-                                                <div class="video-container">
-                                                    {!! $option->option_url !!}
-                                                </div>
                                                 <p class="mb-1 text-muted">{{ $option->option_description }}</p>
                                             </li>
                                         @endforeach
                                     </ul>
                                 </div>
                             @endif
-
                             <div class="mb-4 text-center">
                                 <label class="form-label fw-semibold text-secondary">Your Answer:</label>
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                                    <!-- Update the answer options -->
                                     <div class="form-check me-2">
-                                        <input class="form-check-input" type="radio" name="answer" id="STS"
-                                            value="Sangat Tidak Setuju">
-                                        <label class="form-check-label" for="STS">Sangat Tidak Setuju (STS)</label>
+                                        <input class="form-check-input" type="radio" name="answer" id="sangat-sesuai" value="sangat sesuai" onchange="setNilai(5)">
+                                        <label class="form-check-label" for="sangat-sesuai">Sangat Sesuai</label>
                                     </div>
                                     <div class="form-check me-2">
-                                        <input class="form-check-input" type="radio" name="answer" id="TS"
-                                            value="Tidak Setuju">
-                                        <label class="form-check-label" for="TS">Tidak Setuju (TS)</label>
+                                        <input class="form-check-input" type="radio" name="answer" id="sesuai" value="sesuai" onchange="setNilai(4)">
+                                        <label class="form-check-label" for="sesuai">Sesuai</label>
                                     </div>
                                     <div class="form-check me-2">
-                                        <input class="form-check-input" type="radio" name="answer" id="N"
-                                            value="Netral">
-                                        <label class="form-check-label" for="N">Netral (N)</label>
+                                        <input class="form-check-input" type="radio" name="answer" id="netral" value="netral" onchange="setNilai(3)">
+                                        <label class="form-check-label" for="netral">Netral</label>
                                     </div>
                                     <div class="form-check me-2">
-                                        <input class="form-check-input" type="radio" name="answer" id="S"
-                                            value="Setuju">
-                                        <label class="form-check-label" for="S">Setuju (S)</label>
+                                        <input class="form-check-input" type="radio" name="answer" id="tidak-sesuai" value="tidak sesuai" onchange="setNilai(2)">
+                                        <label class="form-check-label" for="tidak-sesuai">Tidak Sesuai</label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="answer" id="SS"
-                                            value="Sangat Setuju">
-                                        <label class="form-check-label" for="SS">Sangat Setuju (SS)</label>
+                                        <input class="form-check-input" type="radio" name="answer" id="sangat-tidak-sesuai" value="sangat tidak sesuai" onchange="setNilai(1)">
+                                        <label class="form-check-label" for="sangat-tidak-sesuai">Sangat Tidak Sesuai</label>
                                     </div>
+                                    <input type="hidden" name="nilai" id="nilai" value="">
                                 </div>
-
                             </div>
-
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary btn-lg">
                                     {{ $hasNext ? 'Next' : 'Finish' }}
@@ -131,5 +120,13 @@
 @endsection
 
 @push('scripts')
-    <!-- Bootstrap JS -->
+<script>
+    function setNilai(nilai) {
+    const nilaiInput = document.getElementById('nilai');
+    if (nilaiInput) {
+        nilaiInput.value = nilai;
+    }
+}
+
+</script>
 @endpush

@@ -15,7 +15,7 @@ class StrausSurveiController extends Controller
     public function finish()
     {
         // Delete session cookies
-        session()->forget(['completed_straus_survey', 'completed_acp_survey', 'completed_stress_scale_survey', 'user_id']);
+        session()->forget('user_id');
 
         return view('users.finish');
     }

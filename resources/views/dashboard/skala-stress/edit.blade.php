@@ -83,31 +83,18 @@
                                 <input type="hidden" name="question_type" id="question_type_hidden" value="1">
                             </div>
 
-                            <!-- Option URL -->
-                            <div class="form-group">
-                                <label for="option_url">Option URL</label>
-                                <textarea name="option_url" id="option_url" class="form-control mb-2" placeholder="Enter Option URL">{{ old('option_url', $option->option_url ?? '') }}</textarea>
-                                @if ($errors->has('option_url'))
-                                    <span class="help-block">{{ $errors->first('option_url') }}</span>
-                                @endif
-                            </div>
-
                             <!-- Option Description -->
-                            <div class="form-group">
-                                <label for="option_description">Option Description</label>
-                                <input type="text" name="option_description" class="form-control mb-2"
-                                    placeholder="Option Description"
-                                    value="{{ old('option_description', $option->option_description ?? '') }}">
-                                @if ($errors->has('option_description'))
-                                    <span class="help-block">{{ $errors->first('option_description') }}</span>
-                                @endif
-                            </div>
-
-                            <!-- Thumbnail Preview Section -->
-                            <div class="thumbnail-preview mb-2">
-                                <span>Preview will appear here...</span>
-                            </div>
-
+                            @foreach ($options as $option)
+                                <div class="form-group">
+                                    <label for="option_description">Option Description</label>
+                                    <input type="text" name="option_description" class="form-control mb-2"
+                                        placeholder="isi seperti pertanyaan"
+                                        value="{{ old('option_description.' . $loop->index, $option->option_description ?? '') }}">
+                                    @if ($errors->has('option_description.' . $loop->index))
+                                        <span class="help-block">{{ $errors->first('option_description.' . $loop->index) }}</span>
+                                    @endif
+                                </div>
+                            @endforeach
                             <button type="submit" class="btn btn-primary">Update Pertanyaan</button>
                         </form>
                     </div>
@@ -118,18 +105,4 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            $(document).on('input', '#option_url', function() {
-                var embedCode = $(this).val();
-                var previewContainer = $('.thumbnail-preview');
-                if (embedCode.trim() === '') {
-                    previewContainer.html('<span>Preview will appear here...</span>');
-                } else {
-                    previewContainer.html(
-                        embedCode); // Adjust this for specific image/video embedding logic
-                }
-            });
-        });
-    </script>
 @endpush
