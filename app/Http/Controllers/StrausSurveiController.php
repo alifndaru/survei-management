@@ -67,7 +67,6 @@ class StrausSurveiController extends Controller
 
         return view('users.straus.index', compact('currentQuestion', 'currentQuestionIndex', 'hasNext', 'section'));
     }
-
     public function store(Request $request)
     {
         // Validasi input
@@ -76,10 +75,9 @@ class StrausSurveiController extends Controller
             'answer' => $request->input('section') == 1 ? 'required|in:pernah,tidak pernah' : 'nullable',
             'answers' => $request->input('section') == 2 ? 'required|array|min:1' : 'nullable',
             'answers.*' => 'string',
-            'category_id' => 'required|exists:categories,id',
         ], [
             'answer.required' => 'Jawaban harus diisi',
-            'answers.required' => 'Jawaban harus diisi'
+            'answers.required' => 'Jawaban harus diisi',
         ]);
 
         $userId = session('user_id');
@@ -89,50 +87,68 @@ class StrausSurveiController extends Controller
         }
 
         // Simpan jawaban untuk Section 1
-        if ($request->filled('answer')) {
+        if ($request->input('section') == 1 && $request->filled('answer')) {
             $answer = $request->input('answer');
             if ($answer === 'pernah') {
-                $answer = $request->input('frequency');
+                $answer = $request->input('frequency'); // Ambil frekuensi jika "pernah"
             }
+
             $nilai = $this->getNilaiFromFrequency($answer);
             Answare::create([
                 'user_id' => $userId,
                 'question_id' => $request->input('question_id'),
                 'answer' => $answer,
                 'category_id' => $request->input('category_id'),
-                'nilai' => $nilai
+                'nilai' => $nilai,
+                'updated_at' => now(),
+                'created_at' => now(),
             ]);
         }
 
-        if ($request->filled('answers')) {
-            foreach ($request->input('answers', []) as $answerDescription) {
-                if ($answerDescription === 'tidak pernah') {
-                    $frequency = 'tidak pernah';
-                    $nilai = 1;
-                } else {
-                    $frequencyKey = "frequency_" . str_replace(' ', '_', trim($answerDescription));
-                    $frequency = $request->input($frequencyKey);
-                    // Tentukan nilai berdasarkan frekuensi
-                    if ($frequency === 'selalu') {
-                        $nilai = 4;
-                    } elseif ($frequency === 'sering') {
-                        $nilai = 3;
-                    } elseif ($frequency === 'jarang') {
-                        $nilai = 2;
-                    } else {
-                        $nilai = 1;
-                    }
-                }
-                // Simpan jawaban
+        // Simpan jawaban untuk Section 2
+        if ($request->input('section') == 2 && $request->filled('answers')) {
+            // Mengecek jika ada jawaban "tidak pernah"
+            if (in_array('tidak_pernah', $request->input('answers'))) {
+                // Simpan jawaban "tidak pernah"
                 Answare::create([
                     'user_id' => $userId,
-                    'question_id' => $request->input('question_id'),
-                    'answer' => $frequency,
-                    'category_id' => $request->input('category_id'),
-                    'nilai' => $nilai,
+                    'question_id' => $request->question_id,
+                    'answer' => 'tidak pernah',
+                    'category_id' => $request->category_id,
+                    'nilai' => 1, // Nilai untuk "tidak pernah"
+                    'updated_at' => now(),
+                    'created_at' => now(),
                 ]);
+            } else {
+                foreach ($request->input('answers', []) as $answer) {
+                    // Memisahkan ID opsi dan deskripsi
+                    list($optionId, $answerDescription) = explode('|', $answer);
+
+                    $frequencyKey = "frequency_" . $optionId; // Menggunakan ID opsi untuk mendapatkan frekuensi
+                    $frequency = $request->input($frequencyKey); // Dapatkan nilai frekuensi
+
+                    // Pastikan frekuensi tidak null atau tidak tersedia
+                    if (!$frequency) {
+                        continue; // Lewati penyimpanan jika frekuensi tidak dipilih
+                    }
+
+                    // Set nilai berdasarkan frekuensi
+                    $nilai = $this->getNilaiFromFrequency($frequency);
+
+                    // Simpan setiap jawaban dengan frekuensi ke database
+                    Answare::create([
+                        'user_id' => $userId,
+                        'question_id' => $request->question_id,
+                        'answer' => $frequency, // Simpan frekuensi yang dipilih sebagai jawaban
+                        'category_id' => $request->category_id,
+                        'nilai' => $nilai,
+                        'updated_at' => now(),
+                        'created_at' => now(),
+                    ]);
+                }
             }
         }
+
         // Redirect ke pertanyaan berikutnya atau ke halaman selesai
         return redirect()->route('straus-survei.index', ['q' => $request->input('current_question_index') + 1]);
     }
