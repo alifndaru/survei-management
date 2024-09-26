@@ -127,7 +127,7 @@
                                     </div>
                                 </div>
                             @elseif ($section == 2)
-                                <i>*Isi setidaknya salah satu,<br> jika tidak pernah pilih lalu langsung next</i>
+                                 <i>*Isi setidaknya salah satu,<br> jika tidak pernah pilih lalu langsung next</i>
                                 @if ($errors->has('answers'))
                                     <div class="alert alert-danger" role="alert">
                                         {{ $errors->first('answers') }}
@@ -137,7 +137,7 @@
                                     <label class="form-label fw-semibold text-secondary">Jawaban Anda:</label>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                                         <div class="form-check me-2">
-                                           <input class="form-check-input" type="radio" name="answers[]" id="tidak-pernah" value="tidak pernah" onchange="setNilai(1)">
+                                            <input class="form-check-input" type="radio" name="answers[]" id="tidak-pernah" value="tidak_pernah" onchange="setNilai(1)">
                                             <label class="form-check-label" for="tidak-pernah">Tidak Pernah</label>
                                         </div>
                                     </div>
@@ -153,34 +153,26 @@
                                                                 <input class="form-check-input" type="checkbox"
                                                                     id="option_{{ $option->id }}"
                                                                     name="answers[]"
-                                                                    value="{{ $option->option_description }}"
-                                                                    onchange="handleCheckboxChange(this)">
-                                                                <div class="mb-4 text-center frequency-options" style="display: none;">
+                                                                    value="{{ $option->id }}|{{ $option->option_description }}"
+                                                                    onchange="handleCheckboxChange(this, {{ $option->id }})">
+                                                                <div class="mb-4 text-center frequency-options" id="frequency-options-{{ $option->id }}" style="display: none;">
                                                                     <label class="form-label fw-semibold text-secondary">Seberapa Sering:</label>
                                                                     <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                                                                         <div class="form-check me-2">
-                                                                            {{-- <input class="form-check-input" type="radio" name="frequency_{{ $option->option_description }}"
-                                                                                value="selalu" onchange="setNilai(4)"> --}}
-                                                                                <input class="form-check-input" type="radio" name="frequency_{{ $option->option_description }}" value="selalu">
+                                                                            <input class="form-check-input" type="radio" name="frequency_{{ $option->id }}" value="selalu">
                                                                             <label class="form-check-label">Selalu</label>
                                                                         </div>
                                                                         <div class="form-check me-2">
-                                                                            {{-- <input class="form-check-input" type="radio" name="frequency_{{ $option->option_description }}"
-                                                                                value="sering" onchange="setNilai(3)"> --}}
-                                                                                <input class="form-check-input" type="radio" name="frequency_{{ $option->option_description }}" value="sering">
+                                                                            <input class="form-check-input" type="radio" name="frequency_{{ $option->id }}" value="sering">
                                                                             <label class="form-check-label">Sering</label>
                                                                         </div>
                                                                         <div class="form-check">
-                                                                            {{-- <input class="form-check-input" type="radio" name="frequency_{{ $option->option_description }}"
-                                                                                value="jarang" onchange="setNilai(2)"> --}}
-                                                                                <input class="form-check-input" type="radio" name="frequency_{{ $option->option_description }}" value="jarang">
-
+                                                                            <input class="form-check-input" type="radio" name="frequency_{{ $option->id }}" value="jarang">
                                                                             <label class="form-check-label">Jarang</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <label class="form-check-label d-flex flex-column align-items-start"
-                                                                    for="option_{{ $option->id }}">
+                                                                <label class="form-check-label d-flex flex-column align-items-start" for="option_{{ $option->id }}">
                                                                     <p class="text-muted">{{ $option->option_description }}</p>
                                                                     <div class="ratio ratio-16x9 mb-2">
                                                                         {!! $option->option_url !!}
@@ -228,12 +220,19 @@
             }
         }
 
-        function handleCheckboxChange(checkbox) {
-            const frequencyOptions = checkbox.closest('.card-body').querySelector('.frequency-options');
-            if (frequencyOptions) {
-                frequencyOptions.style.display = checkbox.checked ? 'block' : 'none';
+        function handleCheckboxChange(checkbox, optionId) {
+            const frequencyOptions = document.getElementById(`frequency-options-${optionId}`);
+            frequencyOptions.style.display = checkbox.checked ? 'block' : 'none';
+
+            // Uncheck semua radio button jika checkbox tidak dicentang
+            if (!checkbox.checked) {
+                const radios = frequencyOptions.querySelectorAll('input[type="radio"]');
+                radios.forEach(radio => radio.checked = false);
             }
         }
+
+
+
 
     </script>
 @endpush
