@@ -3,7 +3,32 @@
 @section('title', 'ACP')
 
 @push('style')
-    <!-- CSS Libraries -->
+<style>
+    .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+        cursor: auto;
+        background-color: #fff;
+        border-color: #dee2e6;
+    }
+
+    .page-item.active .page-link {
+        z-index: 3;
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    /* Optional: Set uniform size for pagination links */
+    .page-link {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+</style>
 @endpush
 
 @section('main')
@@ -76,7 +101,9 @@
                         </div>
                     </div>
                     <div class="card-footer text-right">
-                        {{ $questions->links() }}
+                        {{-- {{ $questions->links() }} --}}
+                        {{ $questions->links('pagination::bootstrap-4') }}
+
                     </div>
                 </div>
             </div>
