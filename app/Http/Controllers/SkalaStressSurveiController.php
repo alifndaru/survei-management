@@ -45,45 +45,12 @@ class SkalaStressSurveiController extends Controller
 
         return view('users.skala-stress.index', compact('currentQuestion', 'currentQuestionIndex', 'hasNext', 'section'));
     }
-
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'question_id' => 'required|exists:questions,id',
-    //         'answer' => 'required|in:sangat sesuai,sesuai,netral,tidak sesuai,sangat tidak sesuai|string',
-    //         'category_id' => 'required|exists:categories,id',
-    //         'current_question_index' => 'required|integer',
-    //     ], [
-    //         'answer' => 'Jawaban harus diisi'
-    //     ]);
-
-    //     $userId = session('user_id');
-
-    //     if (!$userId) {
-    //         return redirect()->route('users.index');
-    //     }
-
-    //     if ($request->filled('answer')) {
-    //         $answer = $request->input('answer');
-    //         $nilai = $this->getNilaiFromFrequency($answer);
-
-    //         Answare::create([
-    //             'user_id' => $userId,
-    //             'question_id' => $request->input('question_id'),
-    //             'answer' => $answer,
-    //             'category_id' => $request->input('category_id'),
-    //             'nilai' => $nilai
-    //         ]);
-    //     }
-
-    //     return redirect()->route('acp-survei.index', ['q' => $request->input('current_question_index') + 1]);
-    // }
     public function store(Request $request)
     {
         $request->validate([
             'question_id' => 'required|exists:questions,id',
             'answer' => 'required|in:sangat sesuai,sesuai,netral,tidak sesuai,sangat tidak sesuai|string',
-            'category_id' => 'required|exists:categories,id',
+            // 'category_id' => 'required|exists:categories,id',
             'current_question_index' => 'required|integer',
         ], [
             'answer' => 'Jawaban harus diisi'
@@ -95,13 +62,13 @@ class SkalaStressSurveiController extends Controller
         if ($request->filled('answer')) {
             $answer = $request->input('answer');
             $nilai = $this->getNilaiFromFrequency($answer);
-        Answare::create([
-            'user_id' => $userId,
-            'question_id' => $request->input('question_id'),
+            Answare::create([
+                'user_id' => $userId,
+                'question_id' => $request->input('question_id'),
                 'answer' => $answer,
                 'category_id' => $request->input('category_id'),
                 'nilai' => $nilai
-        ]);
+            ]);
         }
 
         // Periksa apakah ini pertanyaan terakhir
