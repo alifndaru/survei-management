@@ -51,7 +51,6 @@ class AcpSurveiController extends Controller
         $request->validate([
             'question_id' => 'required|exists:questions,id',
             'answer' => 'required|in:sangat sesuai,sesuai,netral,tidak sesuai,sangat tidak sesuai|string',
-            'category_id' => 'required|exists:categories,id',
             'current_question_index' => 'required|integer',
         ], [
             'answer' => 'Jawaban harus diisi'
