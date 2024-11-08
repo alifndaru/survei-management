@@ -25,6 +25,7 @@ class User extends Authenticatable
         'kelurahan',
         'kecamatan',
         'gender',
+        'no_hp',
         'role',
     ];
 
