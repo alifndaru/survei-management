@@ -22,6 +22,7 @@ class UsersController extends Controller
             'city' => 'required|string',
             'kelurahan' => 'required|string',
             'kecamatan' => 'required|string',
+            'no_hp' => 'required|numeric',
             'gender' => 'required'
         ]);
 
@@ -33,6 +34,7 @@ class UsersController extends Controller
             'kelurahan' => $request->input('kelurahan'),
             'kecamatan' => $request->input('kecamatan'),
             'gender' => $request->input('gender'),
+            'no_hp' => $request->input('no_hp'),
             'role' => 'user',
         ]);
         session(['user_id' => $user->id]);

@@ -19,6 +19,8 @@
                 @csrf
                 <div class="row">
                     <div class="form-group col-6">
+                        <label for="no_HP">No HP</label>
+                        <input id="no_hp" type="text" class="form-control" name="no_hp" autofocus>
                         <label for="age">Umur</label>
                         <input id="age" type="number" class="form-control" name="age" autofocus>
                     </div>
