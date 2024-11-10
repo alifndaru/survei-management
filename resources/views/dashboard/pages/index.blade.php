@@ -54,7 +54,6 @@
 
 @push('scripts')
     <!-- Include Chart.js library -->
-    <script src="{{ asset('js/chart.js') }}"></script>
     <script>
         let labels = @json($labels);
         let data = @json($data);
