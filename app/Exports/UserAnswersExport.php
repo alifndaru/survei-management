@@ -31,6 +31,7 @@ class UserAnswersExport implements FromQuery, WithHeadings, WithStyles, WithEven
                 'users.kelurahan as kelurahan',
                 'users.kecamatan as kecamatan',
                 'users.gender as gender',
+            'users.no_hp as no_hp',
                 'questions.question_text as question_text',
             'selected_answers.answer as answer',
             'selected_answers.nilai as nilai'
@@ -42,14 +43,14 @@ class UserAnswersExport implements FromQuery, WithHeadings, WithStyles, WithEven
 
     public function headings(): array
     {
-        return ["User ID", "Age", "Province", "City", "Kelurahan", "Kecamatan", "Gender", "Question", "Answer", "Nilai"];
+        return ["User ID", "Age", "Province", "City", "Kelurahan", "Kecamatan", "Gender", "No HP", "Question", "Answer", "Nilai"];
     }
 
     // Applying styles to merge cells
     public function styles(Worksheet $sheet)
     {
         // Example: Set the font to bold for the first row (headings)
-        $sheet->getStyle('A1:I1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:K1')->getFont()->setBold(true);
         return [];
     }
 
@@ -72,7 +73,7 @@ class UserAnswersExport implements FromQuery, WithHeadings, WithStyles, WithEven
                     if ($currentUserId !== $row[0]) {
                         // New user found, merge the previous user's cells if any
                         if ($currentUserId !== null) {
-                            // Merge all cells for user data columns A-G
+                            // Merge all cells for user data columns A-H
                             $worksheet->mergeCells("A$startRow:A$rowIndex");
                             $worksheet->mergeCells("B$startRow:B$rowIndex");
                             $worksheet->mergeCells("C$startRow:C$rowIndex");
@@ -80,6 +81,7 @@ class UserAnswersExport implements FromQuery, WithHeadings, WithStyles, WithEven
                             $worksheet->mergeCells("E$startRow:E$rowIndex");
                             $worksheet->mergeCells("F$startRow:F$rowIndex");
                             $worksheet->mergeCells("G$startRow:G$rowIndex");
+                            $worksheet->mergeCells("H$startRow:H$rowIndex");
                         }
 
                         // Update current user and start a new range for merging
@@ -87,15 +89,15 @@ class UserAnswersExport implements FromQuery, WithHeadings, WithStyles, WithEven
                         $startRow = $rowIndex + 1;
                     }
 
-                    // Merge question column (H) if section 2 and the question is the same
-                    if ($row[7] !== $currentQuestion && $row[6] == 2) {
+                    // Merge question column (I) if section 2 and the question is the same
+                    if ($row[8] !== $currentQuestion && $row[7] == 2) {
                         // New question found, merge the previous question's cells if any
                         if ($currentQuestion !== null && $questionStartRow !== null) {
-                            $worksheet->mergeCells("H$questionStartRow:H" . ($rowIndex));
+                            $worksheet->mergeCells("I$questionStartRow:I" . ($rowIndex));
                         }
 
                         // Set new question and mark the start row for merging
-                        $currentQuestion = $row[7];
+                        $currentQuestion = $row[8];
                         $questionStartRow = $rowIndex + 1;
                     }
                 }
@@ -108,10 +110,11 @@ class UserAnswersExport implements FromQuery, WithHeadings, WithStyles, WithEven
                 $worksheet->mergeCells("E$startRow:E" . count($data));
                 $worksheet->mergeCells("F$startRow:F" . count($data));
                 $worksheet->mergeCells("G$startRow:G" . count($data));
+                $worksheet->mergeCells("H$startRow:H" . count($data));
 
                 // Merge the last question's cells
                 if ($currentQuestion !== null && $questionStartRow !== null) {
-                    $worksheet->mergeCells("H$questionStartRow:H" . count($data));
+                    $worksheet->mergeCells("I$questionStartRow:I" . count($data));
                 }
             }
         ];
