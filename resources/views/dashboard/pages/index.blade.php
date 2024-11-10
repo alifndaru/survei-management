@@ -57,7 +57,7 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
 
     <!-- Include Chart.js library -->
-    <script src="{{'js/chart.js'}}"></script>
+    <script src="{{asset('js/chart.js')}}"></script>
 
     <script>
         let labels = @json($labels);
