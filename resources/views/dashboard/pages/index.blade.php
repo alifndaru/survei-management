@@ -57,8 +57,8 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
 
     <!-- Include Chart.js library -->
-    <script src="{{asset('js/chart.js')}}"></script>
 
+    <script src=" https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js "></script>
     <script>
         let labels = @json($labels);
         let data = @json($data);
