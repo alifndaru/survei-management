@@ -54,6 +54,8 @@
 
 @push('scripts')
     <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         let labels = @json($labels);
         let data = @json($data);
