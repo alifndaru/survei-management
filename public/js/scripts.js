@@ -1,8 +1,8 @@
 "use strict";
 
 // ChartJS
-// ChartJS Global Defaults
 if (window.Chart) {
+    // Set global chart defaults
     Chart.defaults.font.family = "'Nunito', 'Segoe UI', 'Arial'";
     Chart.defaults.font.size = 16;
     Chart.defaults.font.style = "500";
@@ -27,6 +27,7 @@ if (window.Chart) {
         mode: "nearest",
     };
 }
+
 // DropzoneJS
 if(window.Dropzone) {
   Dropzone.autoDiscover = false;
