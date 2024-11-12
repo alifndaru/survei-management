@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\AcpAnswerExport;
+use App\Exports\AllDataExport;
 use App\Exports\SkalaStressExport;
 use App\Exports\UserAnswersExport;
 use App\Models\Answare;
@@ -72,6 +73,10 @@ class DashboardController extends Controller
     public function SkalaExportExcel()
     {
         return Excel::download(new SkalaStressExport, 'user_answers_skala.xlsx');
+    }
+    public function exportAllData()
+    {
+        return Excel::download(new AllDataExport, 'all_data.xlsx');
     }
 
     public function showAllAnswers(Request $request)
