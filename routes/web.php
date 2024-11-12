@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\AllDataExport;
 use App\Http\Controllers\AcpController;
 use App\Http\Controllers\AcpSurveiController;
 use App\Http\Controllers\DashboardController;
@@ -52,6 +53,7 @@ Route::middleware(['auth', 'IsAdmin'])->group(function () {
     Route::get('/export-user-answers', [DashboardController::class, 'exportExcel'])->name('export-user-answers-straus');
     Route::get('/export-user-answers-Acp', [DashboardController::class, 'AcpExportExcel'])->name('export-user-answers-acp');
     Route::get('/export-user-answers-Skala', [DashboardController::class, 'SkalaExportExcel'])->name('export-user-answers-skala');
+    Route::get('/export-all-data', [DashboardController::class, 'exportAllData'])->name('export-all-data');
 
 
     // management answers

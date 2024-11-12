@@ -30,6 +30,11 @@
                             <option value="1">Section 1</option>
                             <option value="2">Section 2</option>
                         </select>
+
+                        <!-- Button to export all data -->
+                        <div class="mt-2">
+                            <a id="exportAllButton" href="{{ route('export-all-data') }}" class="btn btn-secondary">Export All Data</a>
+                        </div>
                     </div>
 
                     <div class="card-body">
