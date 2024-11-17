@@ -3,54 +3,81 @@
 namespace App\Exports;
 
 use App\Models\Answare;
+use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class AllDataExport implements FromCollection, WithHeadings, WithMapping
+class AllDataExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
 {
-    // Mengambil data dari answare beserta relasi yang dibutuhkan
     public function collection()
     {
-        return Answare::with(['user', 'category'])->get(); // Pastikan relasi ada untuk user dan category
+        return User::with(['answers' => function ($query) {
+            $query->with(['category', 'question']);
+        }])->get();
     }
 
-    // Menambahkan header untuk file Excel
     public function headings(): array
     {
         return [
-            'User_Id',         // Nama user dari tabel users
-            'Age',
-            'Province',
-            'City',
-            'Kelurahan',
-            'Kecamatan',
+            'Users_id',
+            'age',
+            'province',
+            'city',
+            'kelurahan',
+            'kecamatan',
             'gender',
-            'No Hp',
-            'ACP',               // ACP value
-            'Skala Stress',      // Skala stress
-            'Answer',            // Jawaban dari tabel answare
-            'Nilai',             // Nilai dari tabel answare
+            'no_hp',
+            'Pertanyaan',
+            'ACP',
+            'Skala Stress',
+            'Straus',
+            'Nilai'
         ];
     }
 
-    // Mapping data yang akan diekspor
-    public function map($answare): array
+    public function map($user): array
     {
-        return [
-            $answare->user->name,            // Mengambil nama user
-            $answare->user->id,          // Mengambil nama user
-            $answare->user->age,         // Mengambil umur user
-            $answare->user->province,    // Mengambil provinsi user
-            $answare->user->city,        // Mengambil kota user
-            $answare->user->kelurahan,   // Mengambil kelurahan user
-            $answare->user->kecamatan,   // Mengambil kecamatan user
-            $answare->user->gender,      // Mengambil jenis kelamin user
-            $answare->user->no_hp,       // Mengambil nomor hp user
-            $answare->acp,                   // Mengambil nilai ACP (jika ada di model Answare)
-            $answare->skala_stress,          // Mengambil skala stress (jika ada di model Answare)
-            $answare->answer,                // Mengambil jawaban
-            $answare->nilai,                 // Mengambil nilai
-        ];
+        $rows = [];
+
+        // Dapatkan semua jawaban user
+        $answers = $user->answers;
+
+        foreach ($answers as $answer) {
+            $row = [
+                $user->id, // Users_id
+                $user->age, // Age
+                $user->province, // Province
+                $user->city, // City
+                $user->kelurahan, // Kelurahan
+                $user->kecamatan, // Kecamatan
+                $user->gender,
+                $user->no_hp,
+                $answer->question->question_text ?? '', // Pertanyaan
+                '', // ACP
+                '', // Skala Stress
+                '', // Straus
+                $answer->nilai // Nilai
+            ];
+
+            // Tempatkan jawaban sesuai kategori
+            // Tempatkan jawaban sesuai kategori
+            switch ($answer->category_id) {
+                case 1: // ACP
+                    $row[9] = $answer->answer; // Correct index for ACP
+                    break;
+                case 2: // Skala Stress
+                    $row[10] = $answer->answer; // Correct index for Skala Stress
+                    break;
+                case 3: // Straus
+                    $row[11] = $answer->answer; // Correct index for Straus
+                    break;
+            }
+
+            $rows[] = $row;
+        }
+
+        return $rows;
     }
 }

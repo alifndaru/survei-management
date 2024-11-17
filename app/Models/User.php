@@ -56,4 +56,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Answare::class);
     }
+
+    public function answers()
+    {
+        return $this->hasMany(Answare::class);
+    }
+
 }
